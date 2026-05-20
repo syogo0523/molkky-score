@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>モルックリケット スコア管理</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:#0f172a;
+  color:white;
+}
+
+.hidden{
+  display:none!important;
+}
+
+.container{
+  max-width:900px;
+  margin:auto;
+  padding:12px;
+}
+
+.card{
+  background:#1e293b;
+  border-radius:20px;
+  padding:14px;
+  margin-bottom:12px;
+  box-shadow:0 4px 12px rgba(0,0,0,.25);
+}
+
+.title{
+  text-align:center;
+  font-size:28px;
+  font-weight:700;
+  margin-bottom:20px;
+}
+
+input{
+  width:100%;
+  padding:16px;
+  border:none;
+  border-radius:14px;
+  font-size:18px;
+  margin-bottom:12px;
+}
+
+button{
+  border:none;
+  border-radius:16px;
+  padding:16px;
+  font-size:18px;
+  font-weight:700;
+  cursor:pointer;
+  transition:.15s;
+}
+
+button:active{
+  transform:scale(.97);
+}
+
+.primary{
+  background:#22c55e;
+  color:white;
+}
+
+.secondary{
+  background:#334155;
+  color:white;
+}
+
+.danger{
+  background:#ef4444;
+  color:white;
+}
+
+.gold{
+  background:#f59e0b;
+  color:black;
+}
+
+.blue{
+  background:#3b82f6;
+  color:white;
+}
+
+.large-btn{
+  width:100%;
+  min-height:64px;
+}
+
+.header{
+  position:sticky;
+  top:0;
+  z-index:10;
+  background:#0f172a;
+  padding-bottom:8px;
+}
+
+.status-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:8px;
+}
+
+.status-box{
+  background:#1e293b;
+  border-radius:16px;
+  padding:10px;
+  text-align:center;
+}
+
+.status-label{
+  font-size:12px;
+  opacity:.7;
+}
+
+.status-value{
+  font-size:20px;
+  font-weight:700;
+}
+
+.scoreboard{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:10px;
+}
+
+.score-box{
+  border-radius:18px;
+  padding:14px;
+  text-align:center;
+}
+
+.score-name{
+  font-size:18px;
+  font-weight:700;
+}
+
+.score-value{
+  font-size:34px;
+  font-weight:900;
+  margin-top:4px;
+}
+
+.skittle-board{
+  display:grid;
+  grid-template-columns:1fr 60px 1fr;
+  gap:8px;
+  align-items:center;
+}
+
+.skittle-row{
+  display:contents;
+}
+
+.center-num{
+  text-align:center;
+  font-size:26px;
+  font-weight:900;
+}
+
+.mark{
+  border-radius:14px;
+  padding:10px;
+  text-align:center;
+  font-weight:700;
+  min-height:52px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.flat{
+  background:#334155;
+}
+
+.one{
+  background:#2563eb;
+}
+
+.open{
+  background:#22c55e;
+  color:black;
+}
+
+.closed{
+  background:#ef4444;
+}
+
+.section-title{
+  font-size:22px;
+  font-weight:800;
+  margin-bottom:12px;
+}
+
+.number-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+}
+
+.num-btn{
+  background:#334155;
+  color:white;
+  min-height:60px;
+}
+
+.selected{
+  outline:4px solid #22c55e;
+}
+
+.toggle-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:10px;
+}
+
+.confirm-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.7);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:100;
+  padding:20px;
+}
+
+.confirm-box{
+  background:#1e293b;
+  width:100%;
+  max-width:420px;
+  border-radius:24px;
+  padding:20px;
+}
+
+.confirm-text{
+  font-size:20px;
+  line-height:1.6;
+  margin-bottom:20px;
+}
+
+.confirm-buttons{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.winner{
+  text-align:center;
+  font-size:32px;
+  font-weight:900;
+  margin-bottom:18px;
+}
+
+.notice{
+  background:#7c2d12;
+  color:#fed7aa;
+  padding:12px;
+  border-radius:14px;
+  margin-bottom:10px;
+  text-align:center;
+  font-weight:700;
+}
+
+.small{
+  font-size:14px;
+  opacity:.8;
+}
+
+.undo-wrap{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+@media(max-width:600px){
+  .score-value{
+    font-size:28px;
+  }
+
+  .center-num{
+    font-size:22px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- 設定 -->
+  <div id="setupScreen">
+    <div class="card">
+      <div class="title">🎯 モルックリケット</div>
+
+      <input id="playerAInput" placeholder="プレイヤーA / チーム名" />
+      <input id="playerBInput" placeholder="プレイヤーB / チーム名" />
+
+      <button class="primary large-btn" onclick="startGame()">
+        ゲーム開始
+      </button>
+    </div>
+  </div>
+
+  <!-- ゲーム -->
+  <div id="gameScreen" class="hidden">
+
+    <div class="header">
+
+      <div class="status-grid">
+        <div class="status-box">
+          <div class="status-label">ターン</div>
+          <div class="status-value" id="turnText"></div>
+        </div>
+
+        <div class="status-box">
+          <div class="status-label">プレイヤー</div>
+          <div class="status-value" id="playerText"></div>
+        </div>
+
+        <div class="status-box">
+          <div class="status-label">投擲</div>
+          <div class="status-value" id="throwText"></div>
+        </div>
+      </div>
+
+      <div class="scoreboard">
+        <div class="score-box blue">
+          <div class="score-name" id="scoreAName"></div>
+          <div class="score-value" id="scoreA"></div>
+        </div>
+
+        <div class="score-box gold">
+          <div class="score-name" id="scoreBName"></div>
+          <div class="score-value" id="scoreB"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 盤面 -->
+    <div class="card">
+      <div class="section-title">スキットル状況</div>
+
+      <div class="skittle-board" id="board"></div>
+    </div>
+
+    <!-- 特殊ルール -->
+    <div id="specialNotice" class="notice hidden">
+      先攻1ターン目特殊ルール中：<br>
+      マークなし / 倒した本数が得点
+    </div>
+
+    <!-- 単品 -->
+    <div class="card">
+      <div class="section-title">
+        ① 単品的中
+      </div>
+
+      <div class="number-grid" id="singleGrid"></div>
+
+      <div class="toggle-grid">
+        <button id="normalBtn" class="secondary" onclick="selectHitType('normal')">
+          直当て以外<br><span class="small">1マーク</span>
+        </button>
+
+        <button id="directBtn" class="secondary" onclick="selectHitType('direct')">
+          直当て<br><span class="small">2マーク</span>
+        </button>
+      </div>
+
+      <div style="margin-top:12px;">
+        <button class="primary large-btn" onclick="confirmSingle()">
+          単品入力を確定
+        </button>
+      </div>
+    </div>
+
+    <!-- 複数 -->
+    <div class="card">
+      <div class="section-title">
+        ② 複数本的中
+      </div>
+
+      <div class="small" style="margin-bottom:12px;">
+        倒したスキットルを全て選択
+      </div>
+
+      <div class="number-grid" id="multiGrid"></div>
+
+      <div style="margin-top:12px;">
+        <button class="primary large-btn" onclick="confirmMulti()">
+          複数本入力を確定
+        </button>
+      </div>
+    </div>
+
+    <!-- ミス -->
+    <div class="card">
+      <div class="section-title">
+        ③ ミス / 0点
+      </div>
+
+      <button class="danger large-btn" onclick="quickMiss()">
+        MISS / 0点
+      </button>
+    </div>
+
+    <div class="undo-wrap">
+      <button class="secondary large-btn" onclick="undo()">
+        ↩ ひとつ前に戻る
+      </button>
+
+      <button class="danger large-btn" onclick="location.reload()">
+        ゲームリセット
+      </button>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- 確認 -->
+<div id="confirmModal" class="confirm-overlay hidden">
+  <div class="confirm-box">
+    <div class="confirm-text" id="confirmText"></div>
+
+    <div class="confirm-buttons">
+      <button class="secondary" onclick="closeConfirm()">
+        戻る
+      </button>
+
+      <button class="primary" onclick="executePending()">
+        確定
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- 勝利 -->
+<div id="winnerModal" class="confirm-overlay hidden">
+  <div class="confirm-box">
+    <div class="winner" id="winnerText"></div>
+
+    <button class="primary large-btn" onclick="location.reload()">
+      新しいゲーム
+    </button>
+  </div>
+</div>
+
+<script>
+
+const nums = [6,7,8,9,10,11,12];
+
+let players = [
+  {
+    name:"",
+    score:0,
+    marks:{}
+  },
+  {
+    name:"",
+    score:0,
+    marks:{}
+  }
+];
+
+nums.forEach(n=>{
+  players[0].marks[n]=0;
+  players[1].marks[n]=0;
+});
+
+let turn = 1;
+let currentPlayer = 0;
+let throwNum = 1;
+
+let history = [];
+
+let selectedSingle = null;
+let selectedHitType = null;
+let selectedMulti = [];
+
+let pendingAction = null;
+
+function startGame(){
+
+  const a = document.getElementById("playerAInput").value.trim() || "プレイヤーA";
+  const b = document.getElementById("playerBInput").value.trim() || "プレイヤーB";
+
+  players[0].name = a;
+  players[1].name = b;
+
+  document.getElementById("setupScreen").classList.add("hidden");
+  document.getElementById("gameScreen").classList.remove("hidden");
+
+  createButtons();
+  updateUI();
+}
+
+function createButtons(){
+
+  const single = document.getElementById("singleGrid");
+  const multi = document.getElementById("multiGrid");
+
+  nums.forEach(n=>{
+
+    const b1 = document.createElement("button");
+    b1.className = "num-btn";
+    b1.innerText = n;
+    b1.onclick = ()=>selectSingle(n,b1);
+    single.appendChild(b1);
+
+    const b2 = document.createElement("button");
+    b2.className = "num-btn";
+    b2.innerText = n;
+    b2.onclick = ()=>toggleMulti(n,b2);
+    multi.appendChild(b2);
+
+  });
+
+}
+
+function selectSingle(n,btn){
+
+  selectedSingle = n;
+
+  document.querySelectorAll("#singleGrid button").forEach(b=>{
+    b.classList.remove("selected");
+  });
+
+  btn.classList.add("selected");
+}
+
+function selectHitType(type){
+
+  selectedHitType = type;
+
+  document.getElementById("normalBtn").classList.remove("selected");
+  document.getElementById("directBtn").classList.remove("selected");
+
+  if(type==="normal"){
+    document.getElementById("normalBtn").classList.add("selected");
+  }else{
+    document.getElementById("directBtn").classList.add("selected");
+  }
+}
+
+function toggleMulti(n,btn){
+
+  if(selectedMulti.includes(n)){
+    selectedMulti = selectedMulti.filter(x=>x!==n);
+    btn.classList.remove("selected");
+  }else{
+    selectedMulti.push(n);
+    btn.classList.add("selected");
+  }
+}
+
+function confirmSingle(){
+
+  if(selectedSingle===null || !selectedHitType){
+    alert("スキットルと直当て種別を選択してください");
+    return;
+  }
+
+  const txt = `
+${players[currentPlayer].name}
+
+単品的中
+対象: ${selectedSingle}
+${selectedHitType==="direct" ? "直当て(2マーク)" : "通常(1マーク)"}
+
+で確定しますか？
+`;
+
+  pendingAction = ()=>{
+    processSingle(selectedSingle,selectedHitType);
+  };
+
+  openConfirm(txt);
+}
+
+function confirmMulti(){
+
+  if(selectedMulti.length===0){
+    alert("倒したスキットルを選択してください");
+    return;
+  }
+
+  const txt = `
+${players[currentPlayer].name}
+
+複数本的中
+倒した:
+${selectedMulti.join(", ")}
+
+で確定しますか？
+`;
+
+  pendingAction = ()=>{
+    processMulti([...selectedMulti]);
+  };
+
+  openConfirm(txt);
+}
+
+function quickMiss(){
+
+  const txt = `
+${players[currentPlayer].name}
+
+MISS / 0点
+
+で確定しますか？
+`;
+
+  pendingAction = ()=>{
+    saveHistory();
+    nextThrow();
+  };
+
+  openConfirm(txt);
+}
+
+function openConfirm(text){
+  document.getElementById("confirmText").innerText = text;
+  document.getElementById("confirmModal").classList.remove("hidden");
+}
+
+function closeConfirm(){
+  document.getElementById("confirmModal").classList.add("hidden");
+}
+
+function executePending(){
+  closeConfirm();
+
+  if(pendingAction){
+    pendingAction();
+  }
+}
+
+function saveHistory(){
+
+  history.push(JSON.stringify({
+    players,
+    turn,
+    currentPlayer,
+    throwNum
+  }));
+
+}
+
+function undo(){
+
+  if(history.length===0){
+    alert("戻れる履歴がありません");
+    return;
+  }
+
+  const prev = JSON.parse(history.pop());
+
+  players = prev.players;
+  turn = prev.turn;
+  currentPlayer = prev.currentPlayer;
+  throwNum = prev.throwNum;
+
+  updateUI();
+}
+
+function isSpecialRule(){
+
+  return turn===1 && currentPlayer===0;
+}
+
+function processSingle(num,type){
+
+  saveHistory();
+
+  const p = players[currentPlayer];
+  const enemy = players[1-currentPlayer];
+
+  const value = type==="direct" ? 2 : 1;
+
+  // 特殊
+  if(isSpecialRule()){
+    p.score += value;
+    nextThrow();
+    return;
+  }
+
+  let remain = value;
+
+  // 自分のフラット→オープン
+  if(p.marks[num] < 2){
+
+    const need = 2 - p.marks[num];
+    const use = Math.min(need,remain);
+
+    p.marks[num]+=use;
+    remain-=use;
+  }
+
+  // オープン済みなら得点
+  if(remain>0 && p.marks[num]>=2 && enemy.marks[num]<2){
+    p.score += num * remain;
+  }
+
+  // 相手オープンならクローズ
+  if(remain>0 && enemy.marks[num]>=2){
+
+    enemy.marks[num] -= remain;
+
+    if(enemy.marks[num]<0){
+      enemy.marks[num]=0;
+    }
+  }
+
+  nextThrow();
+}
+
+function processMulti(list){
+
+  saveHistory();
+
+  const p = players[currentPlayer];
+  const enemy = players[1-currentPlayer];
+
+  // 特殊ルール
+  if(isSpecialRule()){
+    p.score += list.length;
+    nextThrow();
+    return;
+  }
+
+  let scoreCount = 0;
+
+  list.forEach(num=>{
+
+    if(p.marks[num]>=2 && enemy.marks[num]<2){
+      scoreCount++;
+    }else{
+
+      // フラット or 相手オープン
+      if(p.marks[num]<2){
+        p.marks[num]+=1;
+      }else if(enemy.marks[num]>=2){
+        enemy.marks[num]-=1;
+        if(enemy.marks[num]<0){
+          enemy.marks[num]=0;
+        }
+      }
+    }
+
+  });
+
+  p.score += scoreCount;
+
+  nextThrow();
+}
+
+function nextThrow(){
+
+  resetSelections();
+
+  checkColdWin();
+
+  // 2投終了
+  if(throwNum===2){
+
+    throwNum=1;
+
+    // 後攻終了
+    if(currentPlayer===1){
+      currentPlayer=0;
+      turn++;
+
+      if(turn>12){
+        finishGame();
+        return;
+      }
+
+    }else{
+      currentPlayer=1;
+    }
+
+  }else{
+    throwNum=2;
+  }
+
+  updateUI();
+}
+
+function resetSelections(){
+
+  selectedSingle = null;
+  selectedHitType = null;
+  selectedMulti = [];
+
+  document.querySelectorAll(".selected").forEach(el=>{
+    el.classList.remove("selected");
+  });
+}
+
+function getStatus(markA,markB,isLeft){
+
+  const mine = isLeft ? markA : markB;
+  const enemy = isLeft ? markB : markA;
+
+  if(mine>=2 && enemy>=2){
+    return ["クローズ","closed"];
+  }
+
+  if(mine>=2){
+    return ["OPEN","open"];
+  }
+
+  if(mine===1){
+    return ["1 MARK","one"];
+  }
+
+  return ["FLAT","flat"];
+}
+
+function updateUI(){
+
+  document.getElementById("turnText").innerText = `${turn}`;
+  document.getElementById("playerText").innerText = players[currentPlayer].name;
+  document.getElementById("throwText").innerText = `${throwNum}投目`;
+
+  document.getElementById("scoreAName").innerText = players[0].name;
+  document.getElementById("scoreBName").innerText = players[1].name;
+
+  document.getElementById("scoreA").innerText = players[0].score;
+  document.getElementById("scoreB").innerText = players[1].score;
+
+  const board = document.getElementById("board");
+  board.innerHTML = "";
+
+  nums.forEach(num=>{
+
+    const a = players[0].marks[num];
+    const b = players[1].marks[num];
+
+    const left = getStatus(a,b,true);
+    const right = getStatus(a,b,false);
+
+    board.innerHTML += `
+      <div class="mark ${left[1]}">${left[0]}</div>
+      <div class="center-num">${num}</div>
+      <div class="mark ${right[1]}">${right[0]}</div>
+    `;
+  });
+
+  document.getElementById("specialNotice")
+    .classList.toggle("hidden", !isSpecialRule());
+
+}
+
+function checkColdWin(){
+
+  for(let i=0;i<2;i++){
+
+    const p = players[i];
+    const e = players[1-i];
+
+    const allOpen = nums.every(n=>p.marks[n]>=2);
+
+    if(allOpen && p.score >= e.score){
+
+      showWinner(`
+🏆 コールド勝利 🏆
+
+${p.name}
+`);
+
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function finishGame(){
+
+  let txt = "";
+
+  if(players[0].score > players[1].score){
+
+    txt = `
+🏆 勝利 🏆
+
+${players[0].name}
+`;
+
+  }else if(players[1].score > players[0].score){
+
+    txt = `
+🏆 勝利 🏆
+
+${players[1].name}
+`;
+
+  }else{
+
+    txt = `
+🤝 引き分け 🤝
+`;
+  }
+
+  showWinner(txt);
+}
+
+function showWinner(text){
+
+  document.getElementById("winnerText").innerText = text;
+  document.getElementById("winnerModal").classList.remove("hidden");
+}
+
+</script>
+
+</body>
+</html>
