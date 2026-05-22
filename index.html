@@ -9,7 +9,7 @@
 
 :root{
 
-  /* LIGHT MODE (DEFAULT) */
+  /* LIGHT */
 
   --bg:#f4f7fb;
   --card:#ffffff;
@@ -86,7 +86,6 @@ body{
   padding:14px;
   margin-bottom:12px;
   box-shadow:var(--shadow);
-  transition:.2s;
 }
 
 .title{
@@ -555,13 +554,15 @@ button:active{
 
     </div>
 
+    <!-- CONTROL -->
+
     <div class="undo-wrap">
 
-      <button class="secondary large-btn" onclick="undo()">
+      <button class="secondary large-btn" onclick="confirmUndo()">
         ↩ ひとつ前に戻る
       </button>
 
-      <button class="danger large-btn" onclick="location.reload()">
+      <button class="danger large-btn" onclick="confirmReset()">
         リセット
       </button>
 
@@ -582,11 +583,11 @@ button:active{
     <div class="confirm-buttons">
 
       <button class="secondary" onclick="closeConfirm()">
-        戻る
+        いいえ
       </button>
 
       <button class="primary" onclick="executePending()">
-        確定
+        はい
       </button>
 
     </div>
@@ -665,9 +666,11 @@ function toggleTheme(){
 
   const txt=dark ? "☀ ライト" : "🌙 ダーク";
 
-  document.getElementById("themeBtn").innerText=txt;
-  document.getElementById("themeBtn2").innerText=txt;
+  const btn1=document.getElementById("themeBtn");
+  const btn2=document.getElementById("themeBtn2");
 
+  if(btn1) btn1.innerText=txt;
+  if(btn2) btn2.innerText=txt;
 }
 
 /* START */
@@ -753,88 +756,21 @@ function toggleMulti(n,btn){
 
 /* CONFIRM */
 
-function confirmSingle(){
+function openConfirm(text,callback){
 
-  if(selectedSingle===null || !selectedHitType){
-    alert("入力してください");
-    return;
-  }
-
-  pendingAction=()=>processSingle(selectedSingle,selectedHitType);
-
-  openConfirm(`
-${players[currentPlayer].name}
-
-単品的中
-
-対象: ${selectedSingle}
-${selectedHitType==="direct" ? "直当て(2マーク)" : "通常(1マーク)"}
-
-で確定しますか？
-`);
-
-}
-
-function confirmMulti(){
-
-  if(selectedMulti.length===0){
-    alert("選択してください");
-    return;
-  }
-
-  pendingAction=()=>processMulti([...selectedMulti]);
-
-  openConfirm(`
-${players[currentPlayer].name}
-
-複数本的中
-
-${selectedMulti.join(", ")}
-
-で確定しますか？
-`);
-
-}
-
-function quickMiss(){
-
-  pendingAction=()=>{
-
-    saveHistory();
-
-    const p=players[currentPlayer];
-
-    p.throws++;
-
-    p.currentMiss++;
-
-    if(p.currentMiss > p.maxMiss){
-      p.maxMiss=p.currentMiss;
-    }
-
-    nextThrow();
-  };
-
-  openConfirm(`
-${players[currentPlayer].name}
-
-MISS / 0点
-
-で確定しますか？
-`);
-
-}
-
-function openConfirm(text){
+  pendingAction=callback;
 
   document.getElementById("confirmText").innerText=text;
-  document.getElementById("confirmModal").classList.remove("hidden");
+
+  document.getElementById("confirmModal")
+    .classList.remove("hidden");
 
 }
 
 function closeConfirm(){
 
-  document.getElementById("confirmModal").classList.add("hidden");
+  document.getElementById("confirmModal")
+    .classList.add("hidden");
 
 }
 
@@ -845,6 +781,96 @@ function executePending(){
   if(pendingAction){
     pendingAction();
   }
+
+}
+
+/* ACTION CONFIRM */
+
+function confirmSingle(){
+
+  if(selectedSingle===null || !selectedHitType){
+    alert("入力してください");
+    return;
+  }
+
+  openConfirm(
+`${players[currentPlayer].name}
+
+単品的中
+
+対象: ${selectedSingle}
+${selectedHitType==="direct" ? "直当て(2マーク)" : "通常(1マーク)"}
+
+で確定しますか？`,
+()=>processSingle(selectedSingle,selectedHitType)
+  );
+
+}
+
+function confirmMulti(){
+
+  if(selectedMulti.length===0){
+    alert("選択してください");
+    return;
+  }
+
+  openConfirm(
+`${players[currentPlayer].name}
+
+複数本的中
+
+${selectedMulti.join(", ")}
+
+で確定しますか？`,
+()=>processMulti([...selectedMulti])
+  );
+
+}
+
+function quickMiss(){
+
+  openConfirm(
+`${players[currentPlayer].name}
+
+MISS / 0点
+
+で確定しますか？`,
+()=>{
+
+  saveHistory();
+
+  const p=players[currentPlayer];
+
+  p.throws++;
+
+  p.currentMiss++;
+
+  if(p.currentMiss > p.maxMiss){
+    p.maxMiss=p.currentMiss;
+  }
+
+  nextThrow();
+
+});
+}
+
+/* UNDO / RESET CONFIRM */
+
+function confirmUndo(){
+
+  openConfirm(
+`本当に1手戻りますか？`,
+()=>undo()
+  );
+
+}
+
+function confirmReset(){
+
+  openConfirm(
+`本当に試合をリセットしますか？`,
+()=>location.reload()
+  );
 
 }
 
