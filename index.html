@@ -8,13 +8,53 @@
 <style>
 
 :root{
+
+  /* LIGHT MODE (DEFAULT) */
+
+  --bg:#f4f7fb;
+  --card:#ffffff;
+  --sub:#dbe4ee;
+  --txt:#111827;
+
+  --ca:#2563eb;
+  --cb:#dc2626;
+
+  --green:#16a34a;
+
+  --flat:#cbd5e1;
+  --one:#3b82f6;
+  --open:#22c55e;
+  --closed:#ef4444;
+
+  --notice-bg:#fed7aa;
+  --notice-txt:#7c2d12;
+
+  --shadow:0 4px 14px rgba(0,0,0,.08);
+
+}
+
+body.dark{
+
   --bg:#0f172a;
   --card:#1e293b;
   --sub:#334155;
   --txt:#f8fafc;
+
   --ca:#3b82f6;
   --cb:#ef4444;
+
   --green:#22c55e;
+
+  --flat:#475569;
+  --one:#2563eb;
+  --open:#22c55e;
+  --closed:#ef4444;
+
+  --notice-bg:#7c2d12;
+  --notice-txt:#fed7aa;
+
+  --shadow:0 4px 16px rgba(0,0,0,.25);
+
 }
 
 *{
@@ -27,6 +67,7 @@ body{
   background:var(--bg);
   color:var(--txt);
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  transition:.2s;
 }
 
 .hidden{
@@ -44,7 +85,8 @@ body{
   border-radius:22px;
   padding:14px;
   margin-bottom:12px;
-  box-shadow:0 4px 16px rgba(0,0,0,.25);
+  box-shadow:var(--shadow);
+  transition:.2s;
 }
 
 .title{
@@ -61,6 +103,8 @@ input{
   border-radius:16px;
   font-size:18px;
   margin-bottom:12px;
+  background:var(--sub);
+  color:var(--txt);
 }
 
 button{
@@ -70,6 +114,7 @@ button{
   font-size:18px;
   font-weight:800;
   cursor:pointer;
+  transition:.15s;
 }
 
 button:active{
@@ -83,7 +128,7 @@ button:active{
 
 .secondary{
   background:var(--sub);
-  color:white;
+  color:var(--txt);
 }
 
 .danger{
@@ -104,6 +149,22 @@ button:active{
   padding-bottom:8px;
 }
 
+.topbar{
+  display:flex;
+  justify-content:flex-end;
+  margin-bottom:10px;
+}
+
+.theme-btn{
+  background:var(--card);
+  color:var(--txt);
+  border-radius:14px;
+  padding:10px 16px;
+  font-size:15px;
+  font-weight:800;
+  box-shadow:var(--shadow);
+}
+
 .status-grid{
   display:grid;
   grid-template-columns:1fr 1fr 1fr;
@@ -115,6 +176,7 @@ button:active{
   border-radius:18px;
   padding:10px;
   text-align:center;
+  box-shadow:var(--shadow);
 }
 
 .status-label{
@@ -146,6 +208,7 @@ button:active{
   border-radius:18px;
   padding:14px;
   text-align:center;
+  color:white;
 }
 
 .score-a{
@@ -167,8 +230,8 @@ button:active{
 }
 
 .notice{
-  background:#7c2d12;
-  color:#fed7aa;
+  background:var(--notice-bg);
+  color:var(--notice-txt);
   padding:12px;
   border-radius:16px;
   text-align:center;
@@ -200,20 +263,22 @@ button:active{
 }
 
 .flat{
-  background:#475569;
+  background:var(--flat);
 }
 
 .one{
-  background:#2563eb;
+  background:var(--one);
+  color:white;
 }
 
 .open{
-  background:#22c55e;
+  background:var(--open);
   color:black;
 }
 
 .closed{
-  background:#ef4444;
+  background:var(--closed);
+  color:white;
 }
 
 .center-num{
@@ -230,12 +295,12 @@ button:active{
 
 .num-btn{
   background:var(--sub);
-  color:white;
+  color:var(--txt);
   min-height:60px;
 }
 
 .selected{
-  outline:4px solid #22c55e;
+  outline:4px solid var(--green);
 }
 
 .toggle-grid{
@@ -285,7 +350,7 @@ button:active{
 }
 
 .stats{
-  background:#0f172a;
+  background:var(--bg);
   border-radius:18px;
   padding:14px;
   margin-top:14px;
@@ -330,6 +395,12 @@ button:active{
 
   <div id="setupScreen">
 
+    <div class="topbar">
+      <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">
+        🌙 ダーク
+      </button>
+    </div>
+
     <div class="card">
 
       <div class="title">
@@ -353,6 +424,12 @@ button:active{
   <div id="gameScreen" class="hidden">
 
     <div class="header">
+
+      <div class="topbar">
+        <button class="theme-btn" onclick="toggleTheme()" id="themeBtn2">
+          🌙 ダーク
+        </button>
+      </div>
 
       <div class="status-grid">
 
@@ -578,6 +655,23 @@ let pendingAction=null;
 
 let history=[];
 
+/* THEME */
+
+function toggleTheme(){
+
+  document.body.classList.toggle("dark");
+
+  const dark=document.body.classList.contains("dark");
+
+  const txt=dark ? "☀ ライト" : "🌙 ダーク";
+
+  document.getElementById("themeBtn").innerText=txt;
+  document.getElementById("themeBtn2").innerText=txt;
+
+}
+
+/* START */
+
 function startGame(){
 
   players[0].name=document.getElementById("playerAInput").value.trim() || "プレイヤーA";
@@ -589,6 +683,8 @@ function startGame(){
   createButtons();
   updateUI();
 }
+
+/* BUTTONS */
 
 function createButtons(){
 
@@ -655,6 +751,8 @@ function toggleMulti(n,btn){
 
 }
 
+/* CONFIRM */
+
 function confirmSingle(){
 
   if(selectedSingle===null || !selectedHitType){
@@ -711,7 +809,7 @@ function quickMiss(){
     p.currentMiss++;
 
     if(p.currentMiss > p.maxMiss){
-      p.maxMiss = p.currentMiss;
+      p.maxMiss=p.currentMiss;
     }
 
     nextThrow();
@@ -750,6 +848,8 @@ function executePending(){
 
 }
 
+/* HISTORY */
+
 function saveHistory(){
 
   history.push(JSON.stringify({
@@ -778,11 +878,15 @@ function undo(){
   updateUI();
 }
 
+/* RULE */
+
 function isSpecialRule(){
 
   return turn===1 && currentPlayer===0;
 
 }
+
+/* SINGLE */
 
 function processSingle(num,type){
 
@@ -795,7 +899,6 @@ function processSingle(num,type){
 
   p.throws++;
 
-  // 特殊ルール
   if(isSpecialRule()){
 
     p.score += value;
@@ -807,27 +910,16 @@ function processSingle(num,type){
 
   p.totalMarks += value;
 
-  // ==========================================
-  // ★ 最重要バグ修正
-  // 相手OPEN / 自分1MARK に直当て
-  // ==========================================
+  /* 最重要バグ修正 */
+
   if(
     type==="direct" &&
     p.marks[num]===1 &&
     e.marks[num]>=2
   ){
 
-    // 自分がOPEN到達
-    // ↓
-    // 両者OPEN成立
-    // ↓
-    // 即CLOSED
-
     p.marks[num]=2;
     e.marks[num]=2;
-
-    // 残り1マーク分は無効
-    // 得点なし
 
     p.currentMiss=0;
 
@@ -837,7 +929,6 @@ function processSingle(num,type){
 
   let remain=value;
 
-  // 自分をOPENへ
   if(p.marks[num] < 2){
 
     const need=2-p.marks[num];
@@ -847,7 +938,6 @@ function processSingle(num,type){
     remain-=use;
   }
 
-  // 得点
   if(
     remain>0 &&
     p.marks[num]>=2 &&
@@ -858,7 +948,6 @@ function processSingle(num,type){
     remain=0;
   }
 
-  // 相手OPENをクローズ
   if(
     remain>0 &&
     e.marks[num]>=2
@@ -873,7 +962,6 @@ function processSingle(num,type){
     remain=0;
   }
 
-  // 両者OPENならCLOSED
   if(
     p.marks[num]>=2 &&
     e.marks[num]>=2
@@ -887,6 +975,8 @@ function processSingle(num,type){
 
   nextThrow();
 }
+
+/* MULTI */
 
 function processMulti(list){
 
@@ -955,6 +1045,8 @@ function processMulti(list){
   nextThrow();
 }
 
+/* TURN */
+
 function nextThrow(){
 
   resetSelections();
@@ -1004,6 +1096,8 @@ function resetSelections(){
   });
 
 }
+
+/* UI */
 
 function getStatus(mine,enemy){
 
@@ -1066,6 +1160,8 @@ function updateUI(){
 
 }
 
+/* WIN */
+
 function allOpened(player){
 
   return nums.every(n=>player.marks[n]>=2);
@@ -1089,6 +1185,7 @@ function checkColdWin(){
 <br>
 ${p.name}
 `);
+
       return true;
     }
 
@@ -1124,6 +1221,8 @@ ${players[1].name}
   }
 
 }
+
+/* STATS */
 
 function createStatsHTML(){
 
@@ -1168,7 +1267,6 @@ function createStatsHTML(){
 
     </div>
   `;
-
 }
 
 function showWinner(text){
