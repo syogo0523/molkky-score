@@ -16,8 +16,8 @@
   --sub:#dbe4ee;
   --txt:#111827;
 
-  --ca:#2563eb;
-  --cb:#dc2626;
+  --ca:#dc2626;
+  --cb:#2563eb;
 
   --green:#16a34a;
 
@@ -31,6 +31,13 @@
 
   --shadow:0 4px 14px rgba(0,0,0,.08);
 
+  --mark-a-light:#fecaca;
+  --mark-b-light:#bfdbfe;
+  --closed-gray:#6b7280;
+  --closed-num:#9ca3af;
+  --action-yellow:#facc15;
+  --action-yellow-text:#111827;
+
 }
 
 body.dark{
@@ -40,8 +47,8 @@ body.dark{
   --sub:#334155;
   --txt:#f8fafc;
 
-  --ca:#3b82f6;
-  --cb:#ef4444;
+  --ca:#ef4444;
+  --cb:#3b82f6;
 
   --green:#22c55e;
 
@@ -54,6 +61,13 @@ body.dark{
   --notice-txt:#fed7aa;
 
   --shadow:0 4px 16px rgba(0,0,0,.25);
+
+  --mark-a-light:#7f1d1d;
+  --mark-b-light:#1e3a8a;
+  --closed-gray:#374151;
+  --closed-num:#9ca3af;
+  --action-yellow:#eab308;
+  --action-yellow-text:#111827;
 
 }
 
@@ -276,14 +290,43 @@ button:active{
 }
 
 .closed{
-  background:var(--closed);
+  background:var(--closed-gray);
   color:white;
+}
+
+.one-a{
+  background:var(--mark-a-light);
+  color:#111;
+}
+
+.one-b{
+  background:var(--mark-b-light);
+  color:#111;
+}
+
+.open-a{
+  background:var(--ca);
+  color:white;
+}
+
+.open-b{
+  background:var(--cb);
+  color:white;
+}
+
+.action-btn{
+  background:var(--action-yellow);
+  color:var(--action-yellow-text);
 }
 
 .center-num{
   text-align:center;
   font-size:26px;
   font-weight:900;
+}
+
+.center-num.closed-num{
+  color:var(--closed-num);
 }
 
 .number-grid{
@@ -511,7 +554,7 @@ button:active{
       </div>
 
       <div style="margin-top:12px;">
-        <button class="primary large-btn" onclick="confirmSingle()">
+        <button class="action-btn large-btn" onclick="confirmSingle()">
           単品入力を確定
         </button>
       </div>
@@ -533,7 +576,7 @@ button:active{
       <div class="number-grid" id="multiGrid"></div>
 
       <div style="margin-top:12px;">
-        <button class="primary large-btn" onclick="confirmMulti()">
+        <button class="action-btn large-btn" onclick="confirmMulti()">
           複数本入力を確定
         </button>
       </div>
@@ -548,7 +591,7 @@ button:active{
         ③ ミス / 0点
       </div>
 
-      <button class="danger large-btn" onclick="quickMiss()">
+      <button class="action-btn large-btn" onclick="quickMiss()">
         MISS / 0点
       </button>
 
@@ -562,7 +605,7 @@ button:active{
         ↩ ひとつ前に戻る
       </button>
 
-      <button class="danger large-btn" onclick="confirmReset()">
+      <button class="action-btn large-btn" onclick="confirmReset()">
         リセット
       </button>
 
@@ -605,6 +648,10 @@ button:active{
     <div class="winner" id="winnerText"></div>
 
     <div id="statsArea"></div>
+
+    <button class="secondary large-btn" onclick="undoFromWinner()" style="margin-top:16px;">
+      ↩ ひとつ前に戻る
+    </button>
 
     <button class="primary large-btn" onclick="location.reload()" style="margin-top:16px;">
       新しいゲーム
@@ -655,6 +702,10 @@ let selectedMulti=[];
 let pendingAction=null;
 
 let history=[];
+
+let statHistory=[];
+let statFreezeIndex=null;
+
 
 /* THEME */
 
@@ -849,6 +900,7 @@ MISS / 0点
     p.maxMiss=p.currentMiss;
   }
 
+  recordStatSnapshot();
   nextThrow();
 
 });
@@ -886,6 +938,8 @@ function saveHistory(){
   }));
 
 }
+
+function undoFromWinner(){ document.getElementById("winnerModal").classList.add("hidden"); undo(); }
 
 function undo(){
 
@@ -930,6 +984,7 @@ function processSingle(num,type){
     p.score += value;
     p.currentMiss=0;
 
+    recordStatSnapshot();
     nextThrow();
     return;
   }
@@ -949,6 +1004,7 @@ function processSingle(num,type){
 
     p.currentMiss=0;
 
+    recordStatSnapshot();
     nextThrow();
     return;
   }
@@ -999,6 +1055,7 @@ function processSingle(num,type){
 
   p.currentMiss=0;
 
+  recordStatSnapshot();
   nextThrow();
 }
 
@@ -1018,6 +1075,7 @@ function processMulti(list){
     p.score += list.length;
     p.currentMiss=0;
 
+    recordStatSnapshot();
     nextThrow();
     return;
   }
@@ -1068,6 +1126,7 @@ function processMulti(list){
 
   p.currentMiss=0;
 
+  recordStatSnapshot();
   nextThrow();
 }
 
@@ -1125,18 +1184,18 @@ function resetSelections(){
 
 /* UI */
 
-function getStatus(mine,enemy){
+function getStatus(mine,enemy,player){
 
   if(mine>=2 && enemy>=2){
     return ["CLOSED","closed"];
   }
 
   if(mine>=2){
-    return ["OPEN","open"];
+    return ["OPEN",player===0 ? "open-a" : "open-b"];
   }
 
   if(mine===1){
-    return ["1 MARK","one"];
+    return ["1 MARK",player===0 ? "one-a" : "one-b"];
   }
 
   return ["FLAT","flat"];
@@ -1173,12 +1232,14 @@ function updateUI(){
     const a=players[0].marks[num];
     const b=players[1].marks[num];
 
-    const left=getStatus(a,b);
-    const right=getStatus(b,a);
+    const left=getStatus(a,b,0);
+    const right=getStatus(b,a,1);
+
+    const closedClass=(a>=2 && b>=2) ? "closed-num" : "";
 
     board.innerHTML += `
       <div class="mark ${left[1]}">${left[0]}</div>
-      <div class="center-num">${num}</div>
+      <div class="center-num ${closedClass}">${num}</div>
       <div class="mark ${right[1]}">${right[0]}</div>
     `;
 
@@ -1248,49 +1309,49 @@ ${players[1].name}
 
 }
 
+
+function countOpened(player){
+  return nums.filter(n=>player.marks[n]>=2).length;
+}
+
+function recordStatSnapshot(){
+  statHistory.push(JSON.parse(JSON.stringify(players)));
+  if(statFreezeIndex!==null) return;
+  if(countOpened(players[0])>=6 || countOpened(players[1])>=6){
+    statFreezeIndex=statHistory.length-1;
+  }
+}
+
+function getStatsPlayers(){
+  if(statFreezeIndex===null || !statHistory[statFreezeIndex]) return players;
+  return statHistory[statFreezeIndex];
+}
+
 /* STATS */
+
 
 function createStatsHTML(){
 
+  const s=getStatsPlayers();
+
+  const avgA=s[0].throws===0 ? 0 : (s[0].totalMarks/(s[0].throws/2)).toFixed(2);
+  const avgB=s[1].throws===0 ? 0 : (s[1].totalMarks/(s[1].throws/2)).toFixed(2);
+
   return `
     <div class="stats">
-
       <h3>📊 試合スタッツ</h3>
 
       <div class="stat-line">
-
-        <strong>${players[0].name}</strong><br>
-
-        平均マーク数:
-        ${
-          players[0].throws===0
-          ? 0
-          : (players[0].totalMarks / players[0].throws).toFixed(2)
-        }
-        <br>
-
-        最大連続MISS:
-        ${players[0].maxMiss}
-
+        <strong>${s[0].name}</strong><br>
+        平均マーク数(1ターンあたり): ${avgA}<br>
+        最大連続MISS: ${s[0].maxMiss}
       </div>
 
       <div class="stat-line">
-
-        <strong>${players[1].name}</strong><br>
-
-        平均マーク数:
-        ${
-          players[1].throws===0
-          ? 0
-          : (players[1].totalMarks / players[1].throws).toFixed(2)
-        }
-        <br>
-
-        最大連続MISS:
-        ${players[1].maxMiss}
-
+        <strong>${s[1].name}</strong><br>
+        平均マーク数(1ターンあたり): ${avgB}<br>
+        最大連続MISS: ${s[1].maxMiss}
       </div>
-
     </div>
   `;
 }
