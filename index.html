@@ -4,156 +4,373 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <title>モルックリケット</title>
-
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+ 
 <style>
-
+ 
 :root{
-
-  /* LIGHT */
-
-  --bg:#f4f7fb;
+  --bg:#f0f2f5;
   --card:#ffffff;
-  --sub:#dbe4ee;
-  --txt:#111827;
-
-  --ca:#dc2626;
-  --cb:#2563eb;
-
-  --green:#16a34a;
-
+  --sub:#e2e8f0;
+  --txt:#0f172a;
+  --txt2:#64748b;
+ 
+  --ca:#e11d48;
+  --cb:#1d4ed8;
+  --ca-light:#fecdd3;
+  --cb-light:#bfdbfe;
+ 
+  --green:#059669;
+  --green-dark:#047857;
+ 
   --flat:#cbd5e1;
-  --one:#3b82f6;
-  --open:#22c55e;
-  --closed:#ef4444;
-
-  --notice-bg:#fed7aa;
-  --notice-txt:#7c2d12;
-
-  --shadow:0 4px 14px rgba(0,0,0,.08);
-
-  --mark-a-light:#fecaca;
+  --open:#10b981;
+  --closed-gray:#94a3b8;
+  --closed-num:#94a3b8;
+ 
+  --notice-bg:#fff7ed;
+  --notice-txt:#9a3412;
+  --notice-border:#fb923c;
+ 
+  --shadow:0 2px 12px rgba(0,0,0,.06), 0 1px 3px rgba(0,0,0,.04);
+  --shadow-md:0 4px 24px rgba(0,0,0,.10), 0 2px 6px rgba(0,0,0,.06);
+ 
+  --mark-a-light:#fecdd3;
   --mark-b-light:#bfdbfe;
-  --closed-gray:#6b7280;
-  --closed-num:#9ca3af;
-  --action-yellow:#facc15;
-  --action-yellow-text:#111827;
-
+ 
+  --action-yellow:#f59e0b;
+  --action-yellow-dark:#d97706;
+  --action-yellow-text:#000000;
+ 
+  --border:#e2e8f0;
+  --radius:16px;
+  --radius-lg:22px;
+  --radius-sm:10px;
+ 
+  --font-display:'Bebas Neue', sans-serif;
+  --font-body:'Noto Sans JP', sans-serif;
 }
-
+ 
 body.dark{
-
-  --bg:#0f172a;
-  --card:#1e293b;
-  --sub:#334155;
-  --txt:#f8fafc;
-
-  --ca:#ef4444;
+  --bg:#0a0f1e;
+  --card:#131929;
+  --sub:#1e2a40;
+  --txt:#f1f5f9;
+  --txt2:#94a3b8;
+ 
+  --ca:#f43f5e;
   --cb:#3b82f6;
-
-  --green:#22c55e;
-
-  --flat:#475569;
-  --one:#2563eb;
-  --open:#22c55e;
-  --closed:#ef4444;
-
-  --notice-bg:#7c2d12;
-  --notice-txt:#fed7aa;
-
-  --shadow:0 4px 16px rgba(0,0,0,.25);
-
-  --mark-a-light:#7f1d1d;
-  --mark-b-light:#1e3a8a;
+  --ca-light:#4c0519;
+  --cb-light:#1e3a8a;
+ 
+  --green:#10b981;
+  --green-dark:#059669;
+ 
+  --flat:#334155;
+  --open:#10b981;
   --closed-gray:#374151;
-  --closed-num:#9ca3af;
-  --action-yellow:#eab308;
-  --action-yellow-text:#111827;
-
+  --closed-num:#6b7280;
+ 
+  --notice-bg:#2c1508;
+  --notice-txt:#fed7aa;
+  --notice-border:#ea580c;
+ 
+  --shadow:0 2px 16px rgba(0,0,0,.3), 0 1px 4px rgba(0,0,0,.2);
+  --shadow-md:0 4px 32px rgba(0,0,0,.4), 0 2px 8px rgba(0,0,0,.2);
+ 
+  --mark-a-light:#4c0519;
+  --mark-b-light:#1e3a8a;
+ 
+  --action-yellow:#d97706;
+  --action-yellow-dark:#b45309;
+  --action-yellow-text:#000000;
+ 
+  --border:#1e2a40;
 }
-
+ 
 *{
   box-sizing:border-box;
   -webkit-tap-highlight-color:transparent;
 }
-
+ 
 body{
   margin:0;
   background:var(--bg);
   color:var(--txt);
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  transition:.2s;
+  font-family:var(--font-body);
+  transition:background .25s, color .25s;
+  min-height:100vh;
 }
-
-.hidden{
-  display:none!important;
-}
-
+ 
+.hidden{ display:none!important; }
+ 
 .container{
-  max-width:900px;
+  max-width:640px;
   margin:auto;
   padding:12px;
 }
-
+ 
+/* ── CARDS ── */
 .card{
   background:var(--card);
-  border-radius:22px;
-  padding:14px;
+  border-radius:var(--radius-lg);
+  padding:18px;
   margin-bottom:12px;
   box-shadow:var(--shadow);
+  border:1px solid var(--border);
 }
-
-.title{
-  text-align:center;
-  font-size:30px;
-  font-weight:900;
-  margin-bottom:20px;
+ 
+/* ── TOPBAR ── */
+.topbar{
+  display:flex;
+  justify-content:flex-end;
+  margin-bottom:10px;
 }
-
-input{
-  width:100%;
-  padding:16px;
-  border:none;
-  border-radius:16px;
-  font-size:18px;
-  margin-bottom:12px;
-  background:var(--sub);
+ 
+.theme-btn{
+  background:var(--card);
   color:var(--txt);
-}
-
-button{
-  border:none;
-  border-radius:16px;
-  padding:16px;
-  font-size:18px;
-  font-weight:800;
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  padding:8px 14px;
+  font-size:13px;
+  font-weight:700;
+  font-family:var(--font-body);
   cursor:pointer;
+  box-shadow:var(--shadow);
   transition:.15s;
 }
-
-button:active{
-  transform:scale(.98);
+.theme-btn:active{ transform:scale(.97); }
+ 
+/* ── SETUP SCREEN ── */
+.setup-title{
+  font-family:var(--font-display);
+  font-size:52px;
+  letter-spacing:3px;
+  text-align:center;
+  line-height:1;
+  margin-bottom:6px;
+  background:linear-gradient(135deg,var(--ca),var(--cb));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
 }
-
-.primary{
+ 
+.setup-subtitle{
+  text-align:center;
+  font-size:12px;
+  letter-spacing:4px;
+  text-transform:uppercase;
+  color:var(--txt2);
+  margin-bottom:28px;
+}
+ 
+.field-label{
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--txt2);
+  margin-bottom:6px;
+}
+ 
+input[type="text"]{
+  width:100%;
+  padding:14px 16px;
+  border:2px solid var(--border);
+  border-radius:var(--radius-sm);
+  font-size:16px;
+  font-family:var(--font-body);
+  font-weight:700;
+  margin-bottom:16px;
+  background:var(--sub);
+  color:var(--txt);
+  outline:none;
+  transition:.15s;
+}
+input[type="text"]:focus{
+  border-color:var(--green);
+  background:var(--card);
+}
+ 
+.section-divider{
+  border:none;
+  border-top:1px solid var(--border);
+  margin:20px 0 18px;
+}
+ 
+.setup-section-title{
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--txt);
+  margin-bottom:14px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.setup-section-title::before{
+  content:'';
+  display:inline-block;
+  width:3px;
+  height:14px;
+  background:linear-gradient(var(--ca),var(--cb));
+  border-radius:2px;
+}
+ 
+/* Bonus checkboxes */
+.bonus-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-bottom:14px;
+}
+ 
+.toggle-chip{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:12px 10px;
+  border:2px solid var(--border);
+  border-radius:var(--radius-sm);
+  cursor:pointer;
+  font-weight:800;
+  font-size:14px;
+  letter-spacing:1px;
+  transition:.15s;
+  user-select:none;
+  background:var(--sub);
+  color:var(--txt2);
+}
+.toggle-chip input{ display:none; }
+.toggle-chip:has(input:checked){
+  border-color:var(--green);
   background:var(--green);
-  color:white;
+  color:#fff;
 }
-
+.toggle-chip.double:has(input:checked){ background:#7c3aed; border-color:#7c3aed; }
+.toggle-chip.triple:has(input:checked){ background:#0891b2; border-color:#0891b2; }
+ 
+/* Radio throw count */
+.radio-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-bottom:6px;
+}
+ 
+.radio-chip{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:12px 10px;
+  border:2px solid var(--border);
+  border-radius:var(--radius-sm);
+  cursor:pointer;
+  font-weight:800;
+  font-size:14px;
+  letter-spacing:1px;
+  transition:.15s;
+  user-select:none;
+  background:var(--sub);
+  color:var(--txt2);
+}
+.radio-chip input{ display:none; }
+.radio-chip:has(input:checked){
+  border-color:var(--green);
+  background:var(--green);
+  color:#fff;
+}
+ 
+/* Skittle open marks */
+.skittle-marks-grid{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:6px;
+}
+ 
+.sk-num-cell{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+}
+ 
+.sk-num-label{
+  font-family:var(--font-display);
+  font-size:20px;
+  letter-spacing:1px;
+  color:var(--txt);
+}
+ 
+.sk-radio-group{
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+  width:100%;
+}
+ 
+.sk-radio-opt{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:4px 2px;
+  border:1.5px solid var(--border);
+  border-radius:6px;
+  cursor:pointer;
+  font-size:11px;
+  font-weight:700;
+  transition:.15s;
+  background:var(--sub);
+  color:var(--txt2);
+}
+.sk-radio-opt input{ display:none; }
+.sk-radio-opt:has(input:checked){
+  border-color:var(--cb);
+  background:var(--cb);
+  color:#fff;
+}
+ 
+/* Start button */
+button{
+  border:none;
+  border-radius:var(--radius);
+  padding:16px;
+  font-size:16px;
+  font-weight:900;
+  font-family:var(--font-body);
+  cursor:pointer;
+  transition:.15s;
+  letter-spacing:.5px;
+}
+button:active{ transform:scale(.98); }
+ 
+.primary{
+  background:linear-gradient(135deg,var(--green),var(--green-dark));
+  color:white;
+  box-shadow:0 4px 14px rgba(5,150,105,.3);
+}
+ 
 .secondary{
   background:var(--sub);
   color:var(--txt);
 }
-
+ 
 .danger{
-  background:var(--cb);
+  background:linear-gradient(135deg,var(--ca),#be123c);
   color:white;
 }
-
+ 
 .large-btn{
   width:100%;
-  min-height:64px;
+  min-height:60px;
 }
-
+ 
+/* ── GAME HEADER ── */
 .header{
   position:sticky;
   top:0;
@@ -161,829 +378,807 @@ button:active{
   background:var(--bg);
   padding-bottom:8px;
 }
-
-.topbar{
-  display:flex;
-  justify-content:flex-end;
-  margin-bottom:10px;
-}
-
-.theme-btn{
-  background:var(--card);
-  color:var(--txt);
-  border-radius:14px;
-  padding:10px 16px;
-  font-size:15px;
-  font-weight:800;
-  box-shadow:var(--shadow);
-}
-
+ 
 .status-grid{
   display:grid;
   grid-template-columns:1fr 1fr 1fr;
   gap:8px;
+  margin-bottom:10px;
 }
-
+ 
 .status-box{
   background:var(--card);
-  border-radius:18px;
-  padding:10px;
+  border-radius:var(--radius-sm);
+  padding:10px 8px;
   text-align:center;
   box-shadow:var(--shadow);
+  border:1px solid var(--border);
 }
-
+ 
 .status-label{
-  font-size:12px;
-  opacity:.7;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--txt2);
+  margin-bottom:2px;
 }
-
+ 
 .status-value{
+  font-family:var(--font-display);
   font-size:22px;
-  font-weight:900;
+  letter-spacing:1px;
 }
-
-.current-a{
-  color:var(--ca);
-}
-
-.current-b{
-  color:var(--cb);
-}
-
+ 
+.current-a{ color:var(--ca); }
+.current-b{ color:var(--cb); }
+ 
 .scoreboard{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:10px;
-  margin-top:10px;
 }
-
+ 
 .score-box{
-  border-radius:18px;
+  border-radius:var(--radius);
   padding:14px;
   text-align:center;
   color:white;
+  position:relative;
+  overflow:hidden;
 }
-
-.score-a{
-  background:var(--ca);
+.score-box::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:rgba(255,255,255,.08);
+  border-radius:var(--radius);
 }
-
-.score-b{
-  background:var(--cb);
-}
-
+ 
+.score-a{ background:linear-gradient(135deg,var(--ca),#be123c); }
+.score-b{ background:linear-gradient(135deg,var(--cb),#1e40af); }
+ 
 .score-name{
-  font-size:18px;
+  font-size:14px;
   font-weight:700;
+  letter-spacing:1px;
+  opacity:.9;
+  text-overflow:ellipsis;
+  overflow:hidden;
+  white-space:nowrap;
 }
-
+ 
 .score-value{
-  font-size:34px;
-  font-weight:900;
+  font-family:var(--font-display);
+  font-size:44px;
+  letter-spacing:2px;
+  line-height:1;
 }
-
+ 
+/* ── NOTICE ── */
 .notice{
   background:var(--notice-bg);
   color:var(--notice-txt);
-  padding:12px;
-  border-radius:16px;
+  border:1px solid var(--notice-border);
+  padding:10px 14px;
+  border-radius:var(--radius-sm);
   text-align:center;
   font-weight:800;
+  font-size:13px;
+  letter-spacing:.5px;
   margin-bottom:12px;
 }
-
+ 
+/* ── SECTION TITLE ── */
 .section-title{
-  font-size:22px;
+  font-size:11px;
   font-weight:900;
-  margin-bottom:12px;
+  letter-spacing:2.5px;
+  text-transform:uppercase;
+  color:var(--txt2);
+  margin-bottom:14px;
+  display:flex;
+  align-items:center;
+  gap:8px;
 }
-
+.section-title span{
+  font-family:var(--font-display);
+  font-size:22px;
+  letter-spacing:1px;
+  color:var(--txt);
+}
+ 
+/* ── SKITTLE BOARD ── */
 .skittle-board{
   display:grid;
-  grid-template-columns:1fr 60px 1fr;
-  gap:8px;
+  grid-template-columns:1fr 44px 1fr;
+  gap:6px;
   align-items:center;
 }
-
+ 
 .mark{
-  border-radius:14px;
-  padding:10px;
-  min-height:52px;
+  border-radius:var(--radius-sm);
+  padding:8px 6px;
+  min-height:48px;
   display:flex;
   align-items:center;
   justify-content:center;
   font-weight:800;
+  font-size:12px;
+  letter-spacing:.5px;
+  text-align:center;
+  line-height:1.3;
 }
-
-.flat{
-  background:var(--flat);
-}
-
-.one{
-  background:var(--one);
-  color:white;
-}
-
-.open{
-  background:var(--open);
-  color:black;
-}
-
+ 
+.flat{ background:var(--flat); color:var(--txt2); }
+.one-a{ background:var(--ca-light); color:var(--ca); }
+.one-b{ background:var(--cb-light); color:var(--cb); }
+.two-a{ background:var(--ca); color:#fff; opacity:.7; }
+.two-b{ background:var(--cb); color:#fff; opacity:.7; }
+.open-a{ background:var(--ca); color:white; }
+.open-b{ background:var(--cb); color:white; }
 .closed{
   background:var(--closed-gray);
   color:white;
+  opacity:.5;
 }
-
-.one-a{
-  background:var(--mark-a-light);
-  color:#111;
-}
-
-.one-b{
-  background:var(--mark-b-light);
-  color:#111;
-}
-
-.open-a{
-  background:var(--ca);
-  color:white;
-}
-
-.open-b{
-  background:var(--cb);
-  color:white;
-}
-
-.action-btn{
-  background:var(--action-yellow);
-  color:var(--action-yellow-text);
-}
-
+ 
 .center-num{
   text-align:center;
-  font-size:26px;
-  font-weight:900;
+  font-family:var(--font-display);
+  font-size:24px;
+  letter-spacing:1px;
+  color:var(--txt);
 }
-
-.center-num.closed-num{
-  color:var(--closed-num);
-}
-
+.center-num.closed-num{ color:var(--closed-num); }
+ 
+/* ── NUMBER GRID ── */
 .number-grid{
   display:grid;
   grid-template-columns:repeat(4,1fr);
-  gap:10px;
+  gap:8px;
+  margin-bottom:12px;
 }
-
+ 
 .num-btn{
   background:var(--sub);
   color:var(--txt);
-  min-height:60px;
+  min-height:56px;
+  font-family:var(--font-display);
+  font-size:24px;
+  letter-spacing:1px;
+  border:2px solid transparent;
 }
-
+.num-btn:hover{ border-color:var(--green); }
+ 
 .selected{
-  outline:4px solid var(--green);
+  outline:none!important;
+  border:2px solid var(--green)!important;
+  background:var(--green)!important;
+  color:white!important;
 }
-
-.toggle-grid{
+ 
+/* ── MARK TYPE TOGGLE ── */
+.mark-type-row{
+  display:flex;
+  gap:8px;
+  margin-bottom:12px;
+}
+ 
+.mark-type-btn{
+  flex:1;
+  padding:12px 6px;
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:.5px;
+  border:2px solid var(--border);
+  border-radius:var(--radius-sm);
+  background:var(--sub);
+  color:var(--txt2);
+  transition:.15s;
+}
+.mark-type-btn:hover{ border-color:var(--txt2); }
+ 
+.mark-type-btn.active-single{
+  border-color:var(--green);
+  background:var(--green);
+  color:white;
+}
+.mark-type-btn.active-double{
+  border-color:#7c3aed;
+  background:#7c3aed;
+  color:white;
+}
+.mark-type-btn.active-triple{
+  border-color:#0891b2;
+  background:#0891b2;
+  color:white;
+}
+ 
+/* ── ACTION BUTTON ── */
+.action-btn{
+  background:linear-gradient(135deg,var(--action-yellow),var(--action-yellow-dark));
+  color:var(--action-yellow-text);
+  box-shadow:0 4px 12px rgba(245,158,11,.25);
+}
+ 
+/* ── UNDO WRAP ── */
+.undo-wrap{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:10px;
-  margin-top:10px;
+  margin-bottom:20px;
 }
-
+ 
+/* ── CONFIRM / MODAL ── */
 .confirm-overlay{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.7);
+  background:rgba(0,0,0,.65);
+  backdrop-filter:blur(4px);
   display:flex;
   align-items:center;
   justify-content:center;
   z-index:999;
   padding:18px;
 }
-
+ 
 .confirm-box{
   width:100%;
-  max-width:440px;
+  max-width:420px;
   background:var(--card);
-  border-radius:24px;
-  padding:20px;
+  border-radius:var(--radius-lg);
+  padding:22px;
+  box-shadow:var(--shadow-md);
+  border:1px solid var(--border);
 }
-
+ 
 .confirm-text{
-  font-size:20px;
-  line-height:1.6;
+  font-size:18px;
+  font-weight:700;
+  line-height:1.7;
   white-space:pre-line;
 }
-
+ 
 .confirm-buttons{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:10px;
   margin-top:18px;
 }
-
+ 
+/* ── WINNER MODAL ── */
 .winner{
-  font-size:34px;
-  font-weight:900;
+  font-family:var(--font-display);
+  font-size:42px;
+  letter-spacing:3px;
   text-align:center;
   margin-bottom:14px;
 }
-
+ 
 .stats{
-  background:var(--bg);
-  border-radius:18px;
-  padding:14px;
+  background:var(--sub);
+  border-radius:var(--radius);
+  padding:16px;
   margin-top:14px;
 }
-
+ 
 .stat-line{
   margin-bottom:14px;
-  line-height:1.7;
-}
-
-.undo-wrap{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
-
-.small{
+  line-height:1.8;
   font-size:14px;
-  opacity:.8;
 }
-
-@media(max-width:600px){
-
-  .score-value{
-    font-size:28px;
-  }
-
-  .center-num{
-    font-size:22px;
-  }
-
+ 
+.small{
+  font-size:13px;
+  color:var(--txt2);
 }
-
+ 
+@media(max-width:480px){
+  .score-value{ font-size:36px; }
+  .skittle-marks-grid{ grid-template-columns:repeat(4,1fr); }
+  .number-grid{ grid-template-columns:repeat(4,1fr); }
+  .mark{ min-height:42px; font-size:11px; }
+  .center-num{ font-size:20px; }
+}
+ 
 </style>
 </head>
-
+ 
 <body>
-
+ 
 <div class="container">
-
-  <!-- SETUP -->
-
+ 
+  <!-- ══════════════════════════════ SETUP ══════════════════════════════ -->
+ 
   <div id="setupScreen">
-
+ 
     <div class="topbar">
-      <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">
-        🌙 ダーク
-      </button>
+      <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">🌙 DARK</button>
     </div>
-
+ 
     <div class="card">
-
-      <div class="title">
-        🎯 モルックリケット
+ 
+      <div class="setup-title">MÖLKKY</div>
+      <div class="setup-subtitle">Cricket Scoreboard</div>
+ 
+      <!-- Players -->
+      <div class="field-label">PLAYER A</div>
+      <input type="text" id="playerAInput" placeholder="名前 / チーム名">
+ 
+      <div class="field-label">PLAYER B</div>
+      <input type="text" id="playerBInput" placeholder="名前 / チーム名">
+ 
+      <hr class="section-divider">
+ 
+      <!-- Bonus -->
+      <div class="setup-section-title">BONUS MARKS</div>
+      <div class="bonus-row">
+        <label class="toggle-chip double">
+          <input type="checkbox" id="chkDouble" checked>
+          ✕2 &nbsp;DOUBLE
+        </label>
+        <label class="toggle-chip triple">
+          <input type="checkbox" id="chkTriple">
+          ✕3 &nbsp;TRIPLE
+        </label>
       </div>
-
-      <input id="playerAInput" placeholder="プレイヤーA / チーム名">
-
-      <input id="playerBInput" placeholder="プレイヤーB / チーム名">
-
-      <button class="primary large-btn" onclick="startGame()">
-        ゲーム開始
+ 
+      <hr class="section-divider">
+ 
+      <!-- Throws per turn -->
+      <div class="setup-section-title">THROWS / TURN</div>
+      <div class="radio-row" style="margin-bottom:6px;">
+        <label class="radio-chip">
+          <input type="radio" name="throwCount" value="2" checked>
+          2 THROWS
+        </label>
+        <label class="radio-chip">
+          <input type="radio" name="throwCount" value="3">
+          3 THROWS
+        </label>
+      </div>
+ 
+      <hr class="section-divider">
+ 
+      <!-- Open marks per skittle -->
+      <div class="setup-section-title">OPEN MARKS PER SKITTLE</div>
+      <div class="small" style="margin-bottom:12px;">各スキットルをオープンするのに必要なマーク数</div>
+ 
+      <div class="skittle-marks-grid" id="skittleMarkSetup"></div>
+ 
+      <hr class="section-divider">
+ 
+      <button class="primary large-btn" onclick="startGame()" style="margin-top:4px;">
+        🎯 GAME START
       </button>
-
+ 
     </div>
-
+ 
   </div>
-
-  <!-- GAME -->
-
+ 
+  <!-- ══════════════════════════════ GAME ══════════════════════════════ -->
+ 
   <div id="gameScreen" class="hidden">
-
+ 
     <div class="header">
-
+ 
       <div class="topbar">
-        <button class="theme-btn" onclick="toggleTheme()" id="themeBtn2">
-          🌙 ダーク
-        </button>
+        <button class="theme-btn" onclick="toggleTheme()" id="themeBtn2">🌙 DARK</button>
       </div>
-
+ 
       <div class="status-grid">
-
+ 
         <div class="status-box">
-          <div class="status-label">ターン</div>
+          <div class="status-label">TURN</div>
           <div class="status-value" id="turnText"></div>
         </div>
-
+ 
         <div class="status-box">
-          <div class="status-label">投擲</div>
-          <div class="status-value">
-            <span id="playerText"></span>
-          </div>
+          <div class="status-label">PLAYER</div>
+          <div class="status-value"><span id="playerText"></span></div>
         </div>
-
+ 
         <div class="status-box">
-          <div class="status-label">現在</div>
-          <div class="status-value">
-            <span id="throwText"></span>
-          </div>
+          <div class="status-label">THROW</div>
+          <div class="status-value"><span id="throwText"></span></div>
         </div>
-
+ 
       </div>
-
+ 
       <div class="scoreboard">
-
         <div class="score-box score-a">
           <div class="score-name" id="scoreAName"></div>
           <div class="score-value" id="scoreA"></div>
         </div>
-
         <div class="score-box score-b">
           <div class="score-name" id="scoreBName"></div>
           <div class="score-value" id="scoreB"></div>
         </div>
-
       </div>
-
+ 
     </div>
-
+ 
     <div id="specialNotice" class="notice hidden">
-      先攻1ターン目特殊ルール中<br>
-      マークなし / 倒した本数が得点
+      ⚡ 先攻 1ST TURN — マークなし / 倒した本数が得点
     </div>
-
+ 
     <!-- BOARD -->
-
     <div class="card">
-
-      <div class="section-title">
-        スキットル状況
-      </div>
-
+      <div class="section-title"><span>BOARD</span> スキットル状況</div>
       <div class="skittle-board" id="board"></div>
-
     </div>
-
-    <!-- SINGLE -->
-
+ 
+    <!-- SINGLE HIT -->
     <div class="card">
-
-      <div class="section-title">
-        ① 単品的中
-      </div>
-
+      <div class="section-title"><span>①</span> SINGLE HIT — 単品的中</div>
+ 
       <div class="number-grid" id="singleGrid"></div>
-
-      <div class="toggle-grid">
-
-        <button class="secondary" id="normalBtn" onclick="selectHitType('normal')">
-          通常<br>
-          <span class="small">1マーク</span>
+ 
+      <!-- Mark type selector -->
+      <div class="mark-type-row" id="markTypeRow">
+        <button class="mark-type-btn" id="btnSingle" onclick="selectMarkType('single')">
+          SINGLE<br><span class="small">1 MARK</span>
         </button>
-
-        <button class="secondary" id="directBtn" onclick="selectHitType('direct')">
-          直当て<br>
-          <span class="small">2マーク</span>
+        <button class="mark-type-btn" id="btnDouble" onclick="selectMarkType('double')">
+          DOUBLE<br><span class="small">2 MARKS</span>
         </button>
-
-      </div>
-
-      <div style="margin-top:12px;">
-        <button class="action-btn large-btn" onclick="confirmSingle()">
-          単品入力を確定
+        <button class="mark-type-btn" id="btnTriple" onclick="selectMarkType('triple')">
+          TRIPLE<br><span class="small">3 MARKS</span>
         </button>
       </div>
-
+ 
+      <button class="action-btn large-btn" onclick="confirmSingle()">
+        SINGLE HIT を確定
+      </button>
     </div>
-
-    <!-- MULTI -->
-
+ 
+    <!-- MULTI HIT -->
     <div class="card">
-
-      <div class="section-title">
-        ② 複数本的中
-      </div>
-
-      <div class="small" style="margin-bottom:12px;">
-        倒したスキットルを全て選択
-      </div>
-
+      <div class="section-title"><span>②</span> MULTI HIT — 複数本的中</div>
+      <div class="small" style="margin-bottom:12px;">倒したスキットルをすべて選択（各1マーク）</div>
       <div class="number-grid" id="multiGrid"></div>
-
-      <div style="margin-top:12px;">
-        <button class="action-btn large-btn" onclick="confirmMulti()">
-          複数本入力を確定
-        </button>
-      </div>
-
+      <button class="action-btn large-btn" onclick="confirmMulti()">
+        MULTI HIT を確定
+      </button>
     </div>
-
+ 
     <!-- MISS -->
-
     <div class="card">
-
-      <div class="section-title">
-        ③ ミス / 0点
-      </div>
-
+      <div class="section-title"><span>③</span> MISS</div>
       <button class="action-btn large-btn" onclick="quickMiss()">
-        MISS / 0点
+        MISS / 0 MARKS
       </button>
-
     </div>
-
+ 
     <!-- CONTROL -->
-
     <div class="undo-wrap">
-
-      <button class="secondary large-btn" onclick="confirmUndo()">
-        ↩ ひとつ前に戻る
-      </button>
-
-      <button class="action-btn large-btn" onclick="confirmReset()">
-        リセット
-      </button>
-
+      <button class="secondary large-btn" onclick="confirmUndo()">↩ UNDO</button>
+      <button class="danger large-btn" onclick="confirmReset()">↺ RESET</button>
     </div>
-
+ 
   </div>
-
+ 
 </div>
-
-<!-- CONFIRM -->
-
+ 
+<!-- CONFIRM MODAL -->
 <div class="confirm-overlay hidden" id="confirmModal">
-
   <div class="confirm-box">
-
     <div class="confirm-text" id="confirmText"></div>
-
     <div class="confirm-buttons">
-
-      <button class="secondary" onclick="closeConfirm()">
-        いいえ
-      </button>
-
-      <button class="primary" onclick="executePending()">
-        はい
-      </button>
-
+      <button class="secondary" onclick="closeConfirm()">キャンセル</button>
+      <button class="primary" onclick="executePending()">確定</button>
     </div>
-
   </div>
-
 </div>
-
-<!-- RESULT -->
-
+ 
+<!-- WINNER MODAL -->
 <div class="confirm-overlay hidden" id="winnerModal">
-
   <div class="confirm-box">
-
     <div class="winner" id="winnerText"></div>
-
     <div id="statsArea"></div>
-
-    <button class="secondary large-btn" onclick="undoFromWinner()" style="margin-top:16px;">
-      ↩ ひとつ前に戻る
-    </button>
-
-    <button class="primary large-btn" onclick="location.reload()" style="margin-top:16px;">
-      新しいゲーム
-    </button>
-
+    <button class="secondary large-btn" onclick="undoFromWinner()" style="margin-top:16px;">↩ UNDO</button>
+    <button class="primary large-btn" onclick="location.reload()" style="margin-top:12px;">🎯 NEW GAME</button>
   </div>
-
 </div>
-
+ 
 <script>
-
-const nums=[6,7,8,9,10,11,12];
-
-let players=[
-  {
-    name:"",
-    score:0,
-    marks:{},
-    totalMarks:0,
-    throws:0,
-    currentMiss:0,
-    maxMiss:0
-  },
-  {
-    name:"",
-    score:0,
-    marks:{},
-    totalMarks:0,
-    throws:0,
-    currentMiss:0,
-    maxMiss:0
-  }
+ 
+/* ═══════════════════════════════════════════════════════
+   SETUP SCREEN — スキットル設定UIを動的生成
+═══════════════════════════════════════════════════════ */
+ 
+const nums = [6,7,8,9,10,11,12];
+ 
+(function buildSkittleSetup(){
+  const grid = document.getElementById("skittleMarkSetup");
+  nums.forEach(n => {
+    const cell = document.createElement("div");
+    cell.className = "sk-num-cell";
+    cell.innerHTML = `
+      <div class="sk-num-label">${n}</div>
+      <div class="sk-radio-group">
+        <label class="sk-radio-opt">
+          <input type="radio" name="sk_${n}" value="2" checked> 2
+        </label>
+        <label class="sk-radio-opt">
+          <input type="radio" name="sk_${n}" value="3"> 3
+        </label>
+      </div>
+    `;
+    grid.appendChild(cell);
+  });
+})();
+ 
+/* ═══════════════════════════════════════════════════════
+   GAME STATE
+═══════════════════════════════════════════════════════ */
+ 
+/* --- Settings (set on startGame) --- */
+let cfg = {
+  doubleEnabled: true,
+  tripleEnabled: false,
+  throwsPerTurn: 2,
+  openMarks: {}   // num -> required marks to open (2 or 3)
+};
+ 
+let players = [
+  { name:"", score:0, marks:{}, totalMarks:0, throws:0, currentMiss:0, maxMiss:0 },
+  { name:"", score:0, marks:{}, totalMarks:0, throws:0, currentMiss:0, maxMiss:0 }
 ];
-
-nums.forEach(n=>{
-  players[0].marks[n]=0;
-  players[1].marks[n]=0;
+ 
+nums.forEach(n => {
+  players[0].marks[n] = 0;
+  players[1].marks[n] = 0;
 });
-
-let turn=1;
-let currentPlayer=0;
-let throwNum=1;
-
-let selectedSingle=null;
-let selectedHitType=null;
-let selectedMulti=[];
-
-let pendingAction=null;
-
-let history=[];
-
-let statHistory=[];
-let statFreezeIndex=null;
-
-
-/* THEME */
-
+ 
+let turn = 1;
+let currentPlayer = 0;
+let throwNum = 1;
+ 
+let selectedSingle = null;
+let selectedMarkType = null; // 'single' | 'double' | 'triple'
+let selectedMulti = [];
+let pendingAction = null;
+ 
+let history = [];
+let statHistory = [];
+let statFreezeIndex = null;
+ 
+/* ═══════════════════════════════════════════════════════
+   THEME
+═══════════════════════════════════════════════════════ */
+ 
 function toggleTheme(){
-
   document.body.classList.toggle("dark");
-
-  const dark=document.body.classList.contains("dark");
-
-  const txt=dark ? "☀ ライト" : "🌙 ダーク";
-
-  const btn1=document.getElementById("themeBtn");
-  const btn2=document.getElementById("themeBtn2");
-
-  if(btn1) btn1.innerText=txt;
-  if(btn2) btn2.innerText=txt;
+  const dark = document.body.classList.contains("dark");
+  const txt = dark ? "☀ LIGHT" : "🌙 DARK";
+  ["themeBtn","themeBtn2"].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.innerText = txt;
+  });
 }
-
-/* START */
-
+ 
+/* ═══════════════════════════════════════════════════════
+   START GAME
+═══════════════════════════════════════════════════════ */
+ 
 function startGame(){
-
-  players[0].name=document.getElementById("playerAInput").value.trim() || "プレイヤーA";
-  players[1].name=document.getElementById("playerBInput").value.trim() || "プレイヤーB";
-
+  players[0].name = document.getElementById("playerAInput").value.trim() || "PLAYER A";
+  players[1].name = document.getElementById("playerBInput").value.trim() || "PLAYER B";
+ 
+  cfg.doubleEnabled = document.getElementById("chkDouble").checked;
+  cfg.tripleEnabled = document.getElementById("chkTriple").checked;
+  cfg.throwsPerTurn = parseInt(document.querySelector("input[name='throwCount']:checked").value);
+ 
+  nums.forEach(n => {
+    cfg.openMarks[n] = parseInt(document.querySelector(`input[name='sk_${n}']:checked`).value);
+  });
+ 
+  // Reset player marks
+  nums.forEach(n => {
+    players[0].marks[n] = 0;
+    players[1].marks[n] = 0;
+  });
+ 
   document.getElementById("setupScreen").classList.add("hidden");
   document.getElementById("gameScreen").classList.remove("hidden");
-
+ 
+  // Show/hide Double & Triple buttons
+  document.getElementById("btnDouble").style.display = cfg.doubleEnabled ? "" : "none";
+  document.getElementById("btnTriple").style.display = cfg.tripleEnabled ? "" : "none";
+ 
   createButtons();
   updateUI();
 }
-
-/* BUTTONS */
-
+ 
+/* ═══════════════════════════════════════════════════════
+   BUILD BUTTONS
+═══════════════════════════════════════════════════════ */
+ 
 function createButtons(){
-
-  const single=document.getElementById("singleGrid");
-  const multi=document.getElementById("multiGrid");
-
-  nums.forEach(n=>{
-
-    const b1=document.createElement("button");
-    b1.className="num-btn";
-    b1.innerText=n;
-    b1.onclick=()=>selectSingle(n,b1);
+  const single = document.getElementById("singleGrid");
+  const multi = document.getElementById("multiGrid");
+ 
+  nums.forEach(n => {
+    const b1 = document.createElement("button");
+    b1.className = "num-btn";
+    b1.innerText = n;
+    b1.onclick = () => selectSingle(n, b1);
     single.appendChild(b1);
-
-    const b2=document.createElement("button");
-    b2.className="num-btn";
-    b2.innerText=n;
-    b2.onclick=()=>toggleMulti(n,b2);
+ 
+    const b2 = document.createElement("button");
+    b2.className = "num-btn";
+    b2.innerText = n;
+    b2.onclick = () => toggleMulti(n, b2);
     multi.appendChild(b2);
-
   });
-
 }
-
-function selectSingle(n,btn){
-
-  selectedSingle=n;
-
-  document.querySelectorAll("#singleGrid button").forEach(b=>{
-    b.classList.remove("selected");
-  });
-
+ 
+function selectSingle(n, btn){
+  selectedSingle = n;
+  document.querySelectorAll("#singleGrid button").forEach(b => b.classList.remove("selected"));
   btn.classList.add("selected");
 }
-
-function selectHitType(type){
-
-  selectedHitType=type;
-
-  document.getElementById("normalBtn").classList.remove("selected");
-  document.getElementById("directBtn").classList.remove("selected");
-
-  if(type==="normal"){
-    document.getElementById("normalBtn").classList.add("selected");
-  }else{
-    document.getElementById("directBtn").classList.add("selected");
-  }
-
+ 
+function selectMarkType(type){
+  selectedMarkType = type;
+ 
+  const btnSingle = document.getElementById("btnSingle");
+  const btnDouble = document.getElementById("btnDouble");
+  const btnTriple = document.getElementById("btnTriple");
+ 
+  btnSingle.className = "mark-type-btn";
+  btnDouble.className = "mark-type-btn";
+  btnTriple.className = "mark-type-btn";
+ 
+  if(type === "single") btnSingle.classList.add("active-single");
+  if(type === "double") btnDouble.classList.add("active-double");
+  if(type === "triple") btnTriple.classList.add("active-triple");
 }
-
-function toggleMulti(n,btn){
-
+ 
+function toggleMulti(n, btn){
   if(selectedMulti.includes(n)){
-
-    selectedMulti=selectedMulti.filter(x=>x!==n);
+    selectedMulti = selectedMulti.filter(x => x !== n);
     btn.classList.remove("selected");
-
-  }else{
-
+  } else {
     selectedMulti.push(n);
     btn.classList.add("selected");
-
   }
-
 }
-
-/* CONFIRM */
-
-function openConfirm(text,callback){
-
-  pendingAction=callback;
-
-  document.getElementById("confirmText").innerText=text;
-
-  document.getElementById("confirmModal")
-    .classList.remove("hidden");
-
+ 
+/* ═══════════════════════════════════════════════════════
+   CONFIRM MODAL
+═══════════════════════════════════════════════════════ */
+ 
+function openConfirm(text, callback){
+  pendingAction = callback;
+  document.getElementById("confirmText").innerText = text;
+  document.getElementById("confirmModal").classList.remove("hidden");
 }
-
+ 
 function closeConfirm(){
-
-  document.getElementById("confirmModal")
-    .classList.add("hidden");
-
+  document.getElementById("confirmModal").classList.add("hidden");
 }
-
+ 
 function executePending(){
-
   closeConfirm();
-
-  if(pendingAction){
-    pendingAction();
-  }
-
+  if(pendingAction) pendingAction();
 }
-
-/* ACTION CONFIRM */
-
+ 
+/* ═══════════════════════════════════════════════════════
+   ACTION CONFIRMS
+═══════════════════════════════════════════════════════ */
+ 
 function confirmSingle(){
-
-  if(selectedSingle===null || !selectedHitType){
-    alert("入力してください");
+  if(selectedSingle === null || !selectedMarkType){
+    alert("スキットル番号とマーク種別を選択してください");
     return;
   }
-
+  const markVal = markTypeValue(selectedMarkType);
+  const markLabel = markTypeLabel(selectedMarkType);
   openConfirm(
 `${players[currentPlayer].name}
-
-単品的中
-
+ 
+SINGLE HIT
+ 
 対象: ${selectedSingle}
-${selectedHitType==="direct" ? "直当て(2マーク)" : "通常(1マーク)"}
-
+${markLabel}（${markVal} MARK${markVal > 1 ? 'S' : ''}）
+ 
 で確定しますか？`,
-()=>processSingle(selectedSingle,selectedHitType)
+    () => processSingle(selectedSingle, selectedMarkType)
   );
-
 }
-
+ 
 function confirmMulti(){
-
-  if(selectedMulti.length===0){
-    alert("選択してください");
+  if(selectedMulti.length === 0){
+    alert("スキットルを選択してください");
     return;
   }
-
   openConfirm(
 `${players[currentPlayer].name}
-
-複数本的中
-
+ 
+MULTI HIT
+ 
 ${selectedMulti.join(", ")}
-
+ 
 で確定しますか？`,
-()=>processMulti([...selectedMulti])
+    () => processMulti([...selectedMulti])
   );
-
 }
-
+ 
 function quickMiss(){
-
   openConfirm(
 `${players[currentPlayer].name}
-
-MISS / 0点
-
+ 
+MISS / 0 MARKS
+ 
 で確定しますか？`,
-()=>{
-
-  saveHistory();
-
-  const p=players[currentPlayer];
-
-  p.throws++;
-
-  p.currentMiss++;
-
-  if(p.currentMiss > p.maxMiss){
-    p.maxMiss=p.currentMiss;
-  }
-
-  recordStatSnapshot();
-  nextThrow();
-
-});
-}
-
-/* UNDO / RESET CONFIRM */
-
-function confirmUndo(){
-
-  openConfirm(
-`本当に1手戻りますか？`,
-()=>undo()
+    () => {
+      saveHistory();
+      const p = players[currentPlayer];
+      p.throws++;
+      p.currentMiss++;
+      if(p.currentMiss > p.maxMiss) p.maxMiss = p.currentMiss;
+      recordStatSnapshot();
+      nextThrow();
+    }
   );
-
 }
-
-function confirmReset(){
-
-  openConfirm(
-`本当に試合をリセットしますか？`,
-()=>location.reload()
-  );
-
+ 
+/* ═══════════════════════════════════════════════════════
+   HELPERS
+═══════════════════════════════════════════════════════ */
+ 
+function markTypeValue(type){
+  if(type === "double") return 2;
+  if(type === "triple") return 3;
+  return 1;
 }
-
-/* HISTORY */
-
-function saveHistory(){
-
-  history.push(JSON.stringify({
-    players,
-    turn,
-    currentPlayer,
-    throwNum
-  }));
-
+ 
+function markTypeLabel(type){
+  if(type === "double") return "DOUBLE";
+  if(type === "triple") return "TRIPLE";
+  return "SINGLE";
 }
-
-function undoFromWinner(){ document.getElementById("winnerModal").classList.add("hidden"); undo(); }
-
-function undo(){
-
-  if(history.length===0){
-    alert("戻れる履歴がありません");
-    return;
-  }
-
-  const prev=JSON.parse(history.pop());
-
-  players=prev.players;
-  turn=prev.turn;
-  currentPlayer=prev.currentPlayer;
-  throwNum=prev.throwNum;
-
-  updateUI();
+ 
+function openThreshold(num){
+  return cfg.openMarks[num] || 2;
 }
-
-/* RULE */
-
+ 
+function isOpen(marks, num){
+  return marks[num] >= openThreshold(num);
+}
+ 
+function isClosed(marksA, marksB, num){
+  return isOpen(marksA, num) && isOpen(marksB, num);
+}
+ 
+/* ═══════════════════════════════════════════════════════
+   SPECIAL RULE
+═══════════════════════════════════════════════════════ */
+ 
 function isSpecialRule(){
-
-  return turn===1 && currentPlayer===0;
-
+  return turn === 1 && currentPlayer === 0;
 }
+ 
+/* ═══════════════════════════════════════════════════════
+   PROCESS SINGLE HIT
+═══════════════════════════════════════════════════════ */
 
-/* SINGLE */
-
-function processSingle(num,type){
-
+function processSingle(num, type){
   saveHistory();
 
-  const p=players[currentPlayer];
-  const e=players[1-currentPlayer];
-
-  const value=type==="direct" ? 2 : 1;
+  const p = players[currentPlayer];
+  const e = players[1 - currentPlayer];
+  const value = markTypeValue(type);
+  const req = openThreshold(num);
 
   p.throws++;
 
   if(isSpecialRule()){
-
     p.score += value;
-    p.currentMiss=0;
-
+    p.currentMiss = 0;
     recordStatSnapshot();
     nextThrow();
     return;
@@ -991,383 +1186,352 @@ function processSingle(num,type){
 
   p.totalMarks += value;
 
-  /* 最重要バグ修正 */
-
-  if(
-    type==="direct" &&
-    p.marks[num]===1 &&
-    e.marks[num]>=2
-  ){
-
-    p.marks[num]=2;
-    e.marks[num]=2;
-
-    p.currentMiss=0;
-
+  // ─────────────────────────────────────────────────────
+  // ケース①：このスキットルがすでにCLOSED → 何もしない
+  // ─────────────────────────────────────────────────────
+  if(isClosed(p.marks, e.marks, num)){
+    p.currentMiss = 0;
     recordStatSnapshot();
     nextThrow();
     return;
   }
 
-  let remain=value;
+  let remain = value;
 
-  if(p.marks[num] < 2){
-
-    const need=2-p.marks[num];
-    const use=Math.min(need,remain);
-
-    p.marks[num]+=use;
-    remain-=use;
+  // ─────────────────────────────────────────────────────
+  // STEP 1：自分がまだオープンしていない場合、必要マーク数まで消費
+  // ─────────────────────────────────────────────────────
+  if(!isOpen(p.marks, num)){
+    const need = req - p.marks[num];
+    const use = Math.min(need, remain);
+    p.marks[num] += use;
+    remain -= use;
   }
 
-  if(
-    remain>0 &&
-    p.marks[num]>=2 &&
-    e.marks[num]<2
-  ){
+  // ─────────────────────────────────────────────────────
+  // STEP 2：remainの処理
+  //   ・自分がオープンに達した後のremain（超過分）を処理
+  //   ・相手のマークは絶対に削らない
+  // ─────────────────────────────────────────────────────
+  if(remain > 0 && isOpen(p.marks, num)){
 
-    p.score += num * remain;
-    remain=0;
-  }
+    if(!isOpen(e.marks, num)){
+      // ① 相手がまだオープンしていない
+      //    → スキットルはまだCLOSEDでないので、余り分はスコア加算
+      p.score += num * remain;
 
-  if(
-    remain>0 &&
-    e.marks[num]>=2
-  ){
-
-    e.marks[num]-=remain;
-
-    if(e.marks[num]<0){
-      e.marks[num]=0;
+    } else {
+      // ② 相手がすでにオープンしている
+      //    → 自分のオープンで即CLOSED確定
+      //    → 超過分は一切スコアにならない（無効）
+      //    （何もしない）
     }
 
-    remain=0;
+    remain = 0;
   }
 
-  if(
-    p.marks[num]>=2 &&
-    e.marks[num]>=2
-  ){
-
-    p.marks[num]=2;
-    e.marks[num]=2;
+  // ─────────────────────────────────────────────────────
+  // STEP 3：両者ともオープンならCLOSED状態にキャップ
+  //   相手マークは増やさず、自分のマークをreqでキャップするのみ
+  // ─────────────────────────────────────────────────────
+  if(isOpen(p.marks, num)){
+    p.marks[num] = req;
   }
 
-  p.currentMiss=0;
-
+  p.currentMiss = 0;
   recordStatSnapshot();
   nextThrow();
 }
-
-/* MULTI */
-
+ 
+/* ═══════════════════════════════════════════════════════
+   PROCESS MULTI HIT
+═══════════════════════════════════════════════════════ */
+ 
 function processMulti(list){
-
   saveHistory();
-
-  const p=players[currentPlayer];
-  const e=players[1-currentPlayer];
-
+ 
+  const p = players[currentPlayer];
+  const e = players[1 - currentPlayer];
+ 
   p.throws++;
-
+ 
   if(isSpecialRule()){
-
     p.score += list.length;
-    p.currentMiss=0;
-
+    p.currentMiss = 0;
     recordStatSnapshot();
     nextThrow();
     return;
   }
-
+ 
   p.totalMarks += list.length;
 
-  let scoreCount=0;
+  let scoreGain = 0;
 
-  list.forEach(num=>{
+  list.forEach(num => {
+    const req = openThreshold(num);
 
-    if(
-      p.marks[num]>=2 &&
-      e.marks[num]<2
-    ){
+    // ─────────────────────────────────────────────────
+    // ケース①：すでにCLOSED → スキップ（加点なし、マーク変化なし）
+    // ─────────────────────────────────────────────────
+    if(isClosed(p.marks, e.marks, num)){
+      return;
+    }
 
-      scoreCount++;
+    // ─────────────────────────────────────────────────
+    // ケース②：自分がすでにオープン済み（かつ相手はまだ）
+    //    → 得点加算（1点）
+    //    ※ 相手マークは絶対に削らない
+    // ─────────────────────────────────────────────────
+    if(isOpen(p.marks, num) && !isOpen(e.marks, num)){
+      scoreGain++;
+      return;
+    }
 
-    }else{
-
-      if(p.marks[num]<2){
-
-        p.marks[num]+=1;
-
-      }else if(e.marks[num]>=2){
-
-        e.marks[num]-=1;
-
-        if(e.marks[num]<0){
-          e.marks[num]=0;
-        }
-
+    // ─────────────────────────────────────────────────
+    // ケース③：自分がまだオープンしていない → 1マーク追加
+    // ─────────────────────────────────────────────────
+    if(!isOpen(p.marks, num)){
+      p.marks[num] += 1;
+      // オープンに達したらキャップ（得点はなし：多本的中の1マークでオープン到達は加点ゼロ）
+      if(isOpen(p.marks, num)){
+        p.marks[num] = req;
       }
-
+      return;
     }
 
-    if(
-      p.marks[num]>=2 &&
-      e.marks[num]>=2
-    ){
-
-      p.marks[num]=2;
-      e.marks[num]=2;
-    }
-
+    // ケース④：自分・相手ともにオープン → ケース①で捕捉済みのため到達しない
   });
 
-  p.score += scoreCount;
-
-  p.currentMiss=0;
-
+  p.score += scoreGain;
+  p.currentMiss = 0;
   recordStatSnapshot();
   nextThrow();
 }
-
-/* TURN */
-
+ 
+/* ═══════════════════════════════════════════════════════
+   TURN MANAGEMENT
+═══════════════════════════════════════════════════════ */
+ 
 function nextThrow(){
-
   resetSelections();
-
-  if(checkColdWin()){
-    return;
-  }
-
-  if(throwNum===2){
-
-    throwNum=1;
-
-    if(currentPlayer===1){
-
-      currentPlayer=0;
+ 
+  if(checkColdWin()) return;
+ 
+  if(throwNum >= cfg.throwsPerTurn){
+    throwNum = 1;
+ 
+    if(currentPlayer === 1){
+      currentPlayer = 0;
       turn++;
-
-      if(turn>12){
-
+      if(turn > 12){
         finishGame();
         return;
       }
-
-    }else{
-
-      currentPlayer=1;
-
+    } else {
+      currentPlayer = 1;
     }
-
-  }else{
-
-    throwNum=2;
-
+  } else {
+    throwNum++;
   }
-
+ 
   updateUI();
 }
-
+ 
 function resetSelections(){
-
-  selectedSingle=null;
-  selectedHitType=null;
-  selectedMulti=[];
-
-  document.querySelectorAll(".selected").forEach(el=>{
-    el.classList.remove("selected");
+  selectedSingle = null;
+  selectedMarkType = null;
+  selectedMulti = [];
+ 
+  document.querySelectorAll(".selected").forEach(el => el.classList.remove("selected"));
+ 
+  // Reset mark type buttons
+  const ids = ["btnSingle","btnDouble","btnTriple"];
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.className = "mark-type-btn";
   });
-
 }
-
-/* UI */
-
-function getStatus(mine,enemy,player){
-
-  if(mine>=2 && enemy>=2){
-    return ["CLOSED","closed"];
+ 
+/* ═══════════════════════════════════════════════════════
+   UPDATE UI
+═══════════════════════════════════════════════════════ */
+ 
+function getMarkStatus(mine, enemy, num, playerIdx){
+  const req = openThreshold(num);
+ 
+  if(isOpen({[num]:mine}, num) && isOpen({[num]:enemy}, num)){
+    return ["CLOSED", "closed"];
   }
-
-  if(mine>=2){
-    return ["OPEN",player===0 ? "open-a" : "open-b"];
+ 
+  if(isOpen({[num]:mine}, num)){
+    return ["OPEN", playerIdx === 0 ? "open-a" : "open-b"];
   }
-
-  if(mine===1){
-    return ["1 MARK",player===0 ? "one-a" : "one-b"];
+ 
+  if(req === 3){
+    if(mine === 2) return ["2 MARKS", playerIdx === 0 ? "two-a" : "two-b"];
+    if(mine === 1) return ["1 MARK",  playerIdx === 0 ? "one-a"  : "one-b"];
+  } else {
+    if(mine === 1) return ["1 MARK",  playerIdx === 0 ? "one-a"  : "one-b"];
   }
-
-  return ["FLAT","flat"];
+ 
+  return ["—", "flat"];
 }
-
+ 
 function updateUI(){
-
-  document.getElementById("turnText").innerText=turn;
-
-  const pName=document.getElementById("playerText");
-  const tText=document.getElementById("throwText");
-
-  pName.innerText=players[currentPlayer].name;
-  tText.innerText=`${throwNum}投目`;
-
-  pName.className=currentPlayer===0 ? "current-a" : "current-b";
-  tText.className=currentPlayer===0 ? "current-a" : "current-b";
-
-  document.getElementById("scoreAName").innerText=players[0].name;
-  document.getElementById("scoreBName").innerText=players[1].name;
-
-  document.getElementById("scoreA").innerText=players[0].score;
-  document.getElementById("scoreB").innerText=players[1].score;
-
-  document.getElementById("specialNotice")
-    .classList.toggle("hidden",!isSpecialRule());
-
-  const board=document.getElementById("board");
-
-  board.innerHTML="";
-
-  nums.forEach(num=>{
-
-    const a=players[0].marks[num];
-    const b=players[1].marks[num];
-
-    const left=getStatus(a,b,0);
-    const right=getStatus(b,a,1);
-
-    const closedClass=(a>=2 && b>=2) ? "closed-num" : "";
-
+  document.getElementById("turnText").innerText = turn;
+ 
+  const pName = document.getElementById("playerText");
+  const tText = document.getElementById("throwText");
+ 
+  pName.innerText = players[currentPlayer].name;
+  tText.innerText = `${throwNum}/${cfg.throwsPerTurn}`;
+ 
+  pName.className = currentPlayer === 0 ? "current-a" : "current-b";
+  tText.className = currentPlayer === 0 ? "current-a" : "current-b";
+ 
+  document.getElementById("scoreAName").innerText = players[0].name;
+  document.getElementById("scoreBName").innerText = players[1].name;
+  document.getElementById("scoreA").innerText = players[0].score;
+  document.getElementById("scoreB").innerText = players[1].score;
+ 
+  document.getElementById("specialNotice").classList.toggle("hidden", !isSpecialRule());
+ 
+  const board = document.getElementById("board");
+  board.innerHTML = "";
+ 
+  nums.forEach(num => {
+    const a = players[0].marks[num];
+    const b = players[1].marks[num];
+ 
+    const left  = getMarkStatus(a, b, num, 0);
+    const right = getMarkStatus(b, a, num, 1);
+ 
+    const closedClass = isClosed(players[0].marks, players[1].marks, num) ? "closed-num" : "";
+ 
     board.innerHTML += `
       <div class="mark ${left[1]}">${left[0]}</div>
       <div class="center-num ${closedClass}">${num}</div>
       <div class="mark ${right[1]}">${right[0]}</div>
     `;
-
   });
-
 }
-
-/* WIN */
-
+ 
+/* ═══════════════════════════════════════════════════════
+   WIN / END
+═══════════════════════════════════════════════════════ */
+ 
 function allOpened(player){
-
-  return nums.every(n=>player.marks[n]>=2);
-
+  return nums.every(n => isOpen(player.marks, n));
 }
-
+ 
 function checkColdWin(){
-
-  for(let i=0;i<2;i++){
-
-    const p=players[i];
-    const e=players[1-i];
-
-    if(
-      allOpened(p) &&
-      p.score >= e.score
-    ){
-
-      showWinner(`
-🏆 勝利！ 🏆
-<br>
-${p.name}
-`);
-
+  for(let i = 0; i < 2; i++){
+    const p = players[i];
+    const e = players[1 - i];
+    if(allOpened(p) && p.score >= e.score){
+      showWinner(`🏆 WINNER 🏆<br>${p.name}`);
       return true;
     }
-
   }
-
   return false;
 }
-
+ 
 function finishGame(){
-
   if(players[0].score > players[1].score){
-
-    showWinner(`
-🏆 勝利！ 🏆
-<br>
-${players[0].name}
-`);
-
-  }else if(players[1].score > players[0].score){
-
-    showWinner(`
-🏆 勝利！ 🏆
-<br>
-${players[1].name}
-`);
-
-  }else{
-
-    showWinner(`
-🤝 引き分け 🤝
-`);
-
+    showWinner(`🏆 WINNER 🏆<br>${players[0].name}`);
+  } else if(players[1].score > players[0].score){
+    showWinner(`🏆 WINNER 🏆<br>${players[1].name}`);
+  } else {
+    showWinner(`🤝 DRAW 🤝`);
   }
-
 }
-
-
+ 
 function countOpened(player){
-  return nums.filter(n=>player.marks[n]>=2).length;
+  return nums.filter(n => isOpen(player.marks, n)).length;
 }
-
+ 
+/* ═══════════════════════════════════════════════════════
+   STATS
+═══════════════════════════════════════════════════════ */
+ 
 function recordStatSnapshot(){
   statHistory.push(JSON.parse(JSON.stringify(players)));
-  if(statFreezeIndex!==null) return;
-  if(countOpened(players[0])>=6 || countOpened(players[1])>=6){
-    statFreezeIndex=statHistory.length-1;
+  if(statFreezeIndex !== null) return;
+  if(countOpened(players[0]) >= 6 || countOpened(players[1]) >= 6){
+    statFreezeIndex = statHistory.length - 1;
   }
 }
-
+ 
 function getStatsPlayers(){
-  if(statFreezeIndex===null || !statHistory[statFreezeIndex]) return players;
+  if(statFreezeIndex === null || !statHistory[statFreezeIndex]) return players;
   return statHistory[statFreezeIndex];
 }
-
-/* STATS */
-
-
+ 
 function createStatsHTML(){
-
-  const s=getStatsPlayers();
-
-  const avgA=s[0].throws===0 ? 0 : (s[0].totalMarks/(s[0].throws/2)).toFixed(2);
-  const avgB=s[1].throws===0 ? 0 : (s[1].totalMarks/(s[1].throws/2)).toFixed(2);
-
+  const s = getStatsPlayers();
+  const tp = cfg.throwsPerTurn;
+ 
+  const avgA = s[0].throws === 0 ? 0 : (s[0].totalMarks / (s[0].throws / tp)).toFixed(2);
+  const avgB = s[1].throws === 0 ? 0 : (s[1].totalMarks / (s[1].throws / tp)).toFixed(2);
+ 
   return `
     <div class="stats">
-      <h3>📊 試合スタッツ</h3>
-
+      <div style="font-size:13px;font-weight:900;letter-spacing:2px;margin-bottom:12px;opacity:.7;">📊 MATCH STATS</div>
       <div class="stat-line">
         <strong>${s[0].name}</strong><br>
-        平均マーク数(1ターンあたり): ${avgA}<br>
-        最大連続MISS: ${s[0].maxMiss}
+        平均マーク数 / ターン: <strong>${avgA}</strong><br>
+        最大連続 MISS: <strong>${s[0].maxMiss}</strong>
       </div>
-
       <div class="stat-line">
         <strong>${s[1].name}</strong><br>
-        平均マーク数(1ターンあたり): ${avgB}<br>
-        最大連続MISS: ${s[1].maxMiss}
+        平均マーク数 / ターン: <strong>${avgB}</strong><br>
+        最大連続 MISS: <strong>${s[1].maxMiss}</strong>
       </div>
     </div>
   `;
 }
-
+ 
 function showWinner(text){
-
-  document.getElementById("winnerText").innerHTML=text;
-
-  document.getElementById("statsArea").innerHTML=createStatsHTML();
-
-  document.getElementById("winnerModal")
-    .classList.remove("hidden");
-
+  document.getElementById("winnerText").innerHTML = text;
+  document.getElementById("statsArea").innerHTML = createStatsHTML();
+  document.getElementById("winnerModal").classList.remove("hidden");
 }
-
+ 
+/* ═══════════════════════════════════════════════════════
+   HISTORY / UNDO
+═══════════════════════════════════════════════════════ */
+ 
+function saveHistory(){
+  history.push(JSON.stringify({ players, turn, currentPlayer, throwNum }));
+}
+ 
+function undoFromWinner(){
+  document.getElementById("winnerModal").classList.add("hidden");
+  undo();
+}
+ 
+function undo(){
+  if(history.length === 0){
+    alert("戻れる履歴がありません");
+    return;
+  }
+  const prev = JSON.parse(history.pop());
+  players = prev.players;
+  turn = prev.turn;
+  currentPlayer = prev.currentPlayer;
+  throwNum = prev.throwNum;
+  updateUI();
+}
+ 
+function confirmUndo(){
+  openConfirm("1手前に戻りますか？", () => undo());
+}
+ 
+function confirmReset(){
+  openConfirm("試合をリセットしますか？", () => location.reload());
+}
+ 
 </script>
-
+ 
 </body>
 </html>
